@@ -14,65 +14,73 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install XML tools
-        run: sudo apt-get update -qq && sudo apt-get install -y -qq xmlstarlet
-
       - name: Download worldwide XMLTV sources
         shell: bash
         run: |
           set -euo pipefail
           curl --fail --location --retry 4 --retry-delay 10 -o epgpw.xml.gz 'https://epg.pw/xmltv/epg.xml.gz'
-          curl --fail --location --retry 4 --retry-delay 10 -o nexus.xml.gz 'https://dearbulut.github.io/iptv/epg/guide.xml.gz'
           gzip -t epgpw.xml.gz
-          gzip -t nexus.xml.gz
           gunzip -c epgpw.xml.gz > epgpw.xml
-          gunzip -c nexus.xml.gz > nexus.xml
+
+          # EPGShare adds a very large second worldwide source. If it is temporarily
+          # unavailable, keep building from EPG.pw rather than breaking the guide.
+          if curl --fail --location --retry 3 --retry-delay 10 -o epgshare.xml.gz 'https://epgshare01.online/epgshare01/epg_ripper_ALL_SOURCES1.xml.gz'; then
+            gzip -t epgshare.xml.gz
+            gunzip -c epgshare.xml.gz > epgshare.xml
+          else
+            echo 'EPGShare unavailable; continuing with EPG.pw.'
+            rm -f epgshare.xml.gz
+          fi
 
       - name: Merge and de-duplicate XMLTV
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
+          import os
           import xml.etree.ElementTree as ET
-          from pathlib import Path
 
-          inputs = ['epgpw.xml', 'nexus.xml']
-          root = ET.Element('tv', {'generator-info-name':'CaptainStrand TiviMax Multi-Source EPG'})
+          inputs = [x for x in ['epgpw.xml', 'epgshare.xml'] if os.path.exists(x)]
           channels = {}
           programmes = {}
 
           for fn in inputs:
               print('Reading', fn)
               for event, elem in ET.iterparse(fn, events=('end',)):
-                  if elem.tag == 'channel':
+                  tag = elem.tag.rsplit('}', 1)[-1]
+                  if tag == 'channel':
                       cid = elem.get('id')
                       if cid and cid not in channels:
                           channels[cid] = ET.tostring(elem, encoding='unicode')
                       elem.clear()
-                  elif elem.tag == 'programme':
+                  elif tag == 'programme':
                       cid = elem.get('channel')
-                      start = elem.get('start','')
-                      stop = elem.get('stop','')
-                      key = (cid,start,stop)
+                      start = elem.get('start', '')
+                      stop = elem.get('stop', '')
+                      key = (cid, start, stop)
                       if cid and start and key not in programmes:
                           programmes[key] = ET.tostring(elem, encoding='unicode')
                       elem.clear()
 
-          with open('guide.xml','w',encoding='utf-8') as f:
+          with open('guide.xml', 'w', encoding='utf-8') as f:
               f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
               f.write('<tv generator-info-name="CaptainStrand TiviMax Multi-Source EPG">\n')
-              for cid in sorted(channels): f.write(channels[cid]+'\n')
-              for key in sorted(programmes, key=lambda k:(k[1],k[0] or '')): f.write(programmes[key]+'\n')
+              for cid in sorted(channels):
+                  f.write(channels[cid] + '\n')
+              for key in sorted(programmes, key=lambda k: (k[1], k[0] or '')):
+                  f.write(programmes[key] + '\n')
               f.write('</tv>\n')
-          print(f'Channels: {len(channels):,}; programmes: {len(programmes):,}')
+
+          print(f'Sources: {len(inputs)}; channels: {len(channels):,}; programmes: {len(programmes):,}')
           PY
           gzip -9 -c guide.xml > guide.xml.gz
           gzip -t guide.xml.gz
-          rm -f epgpw.xml epgpw.xml.gz nexus.xml nexus.xml.gz
+          rm -f epgpw.xml epgpw.xml.gz epgshare.xml epgshare.xml.gz
 
       - name: Commit refreshed guide
         shell: bash
         run: |
+          set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add guide.xml guide.xml.gz
