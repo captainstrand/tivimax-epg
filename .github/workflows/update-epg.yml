@@ -24,12 +24,12 @@ jobs:
           else
             echo 'EPGShare unavailable; continuing with EPG.pw.'
           fi
-      - name: Merge current programme window and add safe aliases
+      - name: Merge programme window and add targeted aliases
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import os,re,copy
+          import os,re,json
           import xml.etree.ElementTree as ET
           from datetime import datetime,timezone,timedelta
           now=datetime.now(timezone.utc); low=now-timedelta(days=1); high=now+timedelta(days=7)
@@ -55,26 +55,71 @@ jobs:
                           k=(cid,start,stop)
                           if k not in programmes: programmes[k]=ET.tostring(e,encoding='unicode'); used.add(cid)
                   e.clear()
-          # Safe alias layer: many IPTV providers alter only the letter case of XMLTV IDs
-          # (for example tnt.us vs TNT.us). Duplicate those schedules under lowercase IDs.
-          alias_of={}
-          existing=set(channels)
+          # Build conservative aliases. XMLTV requires programme channel= to match channel id.
+          # 1) lowercase ID aliases; 2) canonical iptv-org names/alt_names when exactly one
+          # active source channel shares that normalized name. Ambiguous names are skipped.
+          alias_of={}; existing=set(channels)
           for cid in list(used):
-              lowid=cid.lower()
-              if lowid!=cid and lowid not in existing:
-                  alias_of[lowid]=cid
-          print('Safe lowercase ID aliases:',len(alias_of))
+              aid=cid.lower()
+              if aid!=cid and aid not in existing: alias_of.setdefault(aid,cid)
+          def norm(s): return re.sub(r'[^a-z0-9]+','', (s or '').lower())
+          canon=[]
+          if os.path.exists('channels.json'):
+              try: canon=json.load(open('channels.json',encoding='utf-8'))
+              except Exception as ex: print('channels.json ignored:',ex)
+          # Match canonical database IDs directly to source IDs case-insensitively first.
+          active_lower={}
+          for cid in used: active_lower.setdefault(cid.lower(),[]).append(cid)
+          canonical_hits=0
+          for c in canon:
+              cid=c.get('id')
+              if not cid or cid in used or cid in alias_of: continue
+              hits=active_lower.get(cid.lower(),[])
+              if len(hits)==1:
+                  alias_of[cid]=hits[0]; canonical_hits+=1
+          # Name-based matching is only accepted when the normalized name is unique on both
+          # sides and country suffix agrees where available. This avoids wrong local/network EPGs.
+          src_names={}
+          for cid in used:
+              try:
+                  e=ET.fromstring(channels[cid]); names=[x.text for x in e.findall('.//display-name') if x.text]
+              except Exception: names=[]
+              for n in names:
+                  z=norm(n)
+                  if z: src_names.setdefault(z,set()).add(cid)
+          candidate={}
+          for c in canon:
+              target=c.get('id'); country=(c.get('country') or '').lower()
+              if not target or target in used or target in alias_of: continue
+              names=[c.get('name')]+(c.get('alt_names') or [])
+              hits=set()
+              for n in names:
+                  z=norm(n)
+                  if z and len(src_names.get(z,set()))==1: hits |= src_names[z]
+              if country:
+                  same={x for x in hits if x.lower().endswith('.'+country) or ('.'+country+'@') in x.lower()}
+                  if same: hits=same
+              if len(hits)==1: candidate[target]=next(iter(hits))
+          # Prevent many canonical IDs from being guessed onto one source schedule unless they
+          # were exact-ID aliases. This is especially important for regional/local channels.
+          rev={}
+          for a,s in candidate.items(): rev.setdefault(s,[]).append(a)
+          name_hits=0
+          for a,s in candidate.items():
+              if len(rev[s])==1: alias_of[a]=s; name_hits+=1
+          print('Aliases total:',len(alias_of),'canonical-id:',canonical_hits,'unique-name:',name_hits)
           with open('guide.xml','w',encoding='utf-8') as f:
               f.write('<?xml version="1.0" encoding="UTF-8"?>\n<tv generator-info-name="CaptainStrand TiviMax Multi-Source EPG">\n')
               for cid in sorted(used):
                   if cid in channels:f.write(channels[cid]+'\n')
               for aid,src in sorted(alias_of.items()):
+                  if src not in channels: continue
                   e=ET.fromstring(channels[src]); e.set('id',aid); f.write(ET.tostring(e,encoding='unicode')+'\n')
               for k in sorted(programmes,key=lambda x:(x[1],x[0] or '')): f.write(programmes[k]+'\n')
-              # Write alias programmes after originals, changing only channel=.
+              bysrc={}
+              for a,s in alias_of.items(): bysrc.setdefault(s,[]).append(a)
               for k in sorted(programmes,key=lambda x:(x[1],x[0] or '')):
-                  cid=k[0]; aid=cid.lower()
-                  if aid in alias_of:
+                  for aid in bysrc.get(k[0],[]):
                       e=ET.fromstring(programmes[k]); e.set('channel',aid); f.write(ET.tostring(e,encoding='unicode')+'\n')
               f.write('</tv>\n')
           print(f'Sources: {len(inputs)}; active channels: {len(used):,}; programmes: {len(programmes):,}; aliases: {len(alias_of):,}')
@@ -92,4 +137,4 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add guide.xml.gz
-          if git diff --cached --quiet; then echo 'Guide unchanged.'; else git commit -m 'Refresh worldwide XMLTV guide with TiviMax aliases'; git push; fi
+          if git diff --cached --quiet; then echo 'Guide unchanged.'; else git commit -m 'Refresh worldwide XMLTV guide with targeted aliases'; git push; fi
