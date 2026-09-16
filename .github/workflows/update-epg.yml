@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Download EPG and channel databases
+      - name: Download EPG and matching databases
         shell: bash
         run: |
           set -euo pipefail
@@ -23,8 +23,10 @@ jobs:
             gzip -t epgshare.xml.gz && gunzip -c epgshare.xml.gz > epgshare.xml
           fi
           curl --fail --location --retry 3 -o channels.json 'https://iptv-org.github.io/api/channels.json'
+          curl --fail --location --retry 3 -o feeds.json 'https://iptv-org.github.io/api/feeds.json'
+          curl --fail --location --retry 3 -o guides.json 'https://iptv-org.github.io/api/guides.json'
 
-      - name: Merge programme window and provider-targeted aliases
+      - name: Merge programme window and feed-aware aliases
         shell: bash
         run: |
           set -euo pipefail
@@ -54,41 +56,84 @@ jobs:
                       cid=e.get('channel'); start=e.get('start',''); stop=e.get('stop',''); when=dt(start)
                       if cid and when and low<=when<=high:
                           k=(cid,start,stop)
-                          if k not in programmes:
-                              programmes[k]=ET.tostring(e,encoding='unicode'); used.add(cid)
+                          if k not in programmes: programmes[k]=ET.tostring(e,encoding='unicode'); used.add(cid)
                   e.clear()
 
-          alias_of={}; existing=set(channels)
-          # Safe case aliases.
-          for cid in used:
-              aid=cid.lower()
-              if aid!=cid and aid not in existing: alias_of.setdefault(aid,cid)
-
-          # Canonical database aliases, refreshed every build.
           canon=json.load(open('channels.json',encoding='utf-8'))
+          feeds=json.load(open('feeds.json',encoding='utf-8'))
+          guides=json.load(open('guides.json',encoding='utf-8'))
+          alias_of={}; existing=set(channels)
           active_lower={}
           for cid in used: active_lower.setdefault(cid.lower(),[]).append(cid)
+          def add(alias,target):
+              if not alias or alias in used or alias in existing or alias in alias_of: return False
+              hits=[]
+              if target in used: hits=[target]
+              else: hits=active_lower.get(target.lower(),[])
+              if len(hits)==1: alias_of[alias]=hits[0]; return True
+              return False
+
+          case_hits=0
+          for cid in used:
+              aid=cid.lower()
+              if aid!=cid and aid not in existing and aid not in alias_of:
+                  alias_of[aid]=cid; case_hits+=1
+
           canonical_hits=0
           for c in canon:
               cid=c.get('id')
-              if not cid or cid in used or cid in alias_of: continue
-              hits=active_lower.get(cid.lower(),[])
-              if len(hits)==1:
-                  alias_of[cid]=hits[0]; canonical_hits+=1
+              if cid and add(cid,cid): canonical_hits+=1
 
-          # Provider-specific mappings derived from the user's TiviMax playlist.
+          # IPTV-org guide metadata explicitly links canonical channel/feed IDs to EPG sources.
+          # Create base/feed aliases only when an active source schedule uniquely resolves.
+          guide_hits=0; guide_seen=set()
+          for g in guides:
+              base=g.get('channel'); feed=g.get('feed')
+              if not base: continue
+              ids=[base]
+              if feed: ids += [base+'@'+feed]
+              for gid in ids:
+                  if gid in guide_seen: continue
+                  guide_seen.add(gid)
+                  # Try exact feed first, then base only when unique.
+                  targets=[gid,base]
+                  for t in targets:
+                      if add(gid,t): guide_hits+=1; break
+
+          # Feed database gives alternate feed names. Add conservative @feed aliases.
+          feed_hits=0
+          for f in feeds:
+              base=f.get('channel'); fid=f.get('id')
+              if not base or not fid: continue
+              canonical=base+'@'+fid
+              targets=[canonical,base]
+              for t in targets:
+                  if add(canonical,t): feed_hits+=1; break
+              for n in (f.get('alt_names') or [])+[f.get('name')]:
+                  if not n: continue
+                  clean=re.sub(r'[^A-Za-z0-9]+','',n)
+                  if clean:
+                      for t in targets:
+                          if add(base+'@'+clean,t): feed_hits+=1; break
+
+          # Existing provider aliases. Resolve their targets through direct, lowercase,
+          # canonical and feed-aware aliases instead of requiring the target itself to be active.
           provider=json.load(open('provider_aliases.json',encoding='utf-8')) if os.path.exists('provider_aliases.json') else {}
-          provider_hits=0; provider_missing=0
-          for provider_id,target in provider.items():
-              candidates=[]
-              if target in used: candidates=[target]
-              elif target.lower() in active_lower: candidates=active_lower[target.lower()]
-              if len(candidates)==1 and provider_id not in used:
-                  alias_of[provider_id]=candidates[0]; provider_hits+=1
-              else: provider_missing+=1
+          provider_hits=0; provider_missing=[]
+          for pid,target in provider.items():
+              resolved=None
+              if target in used: resolved=target
+              elif len(active_lower.get(target.lower(),[]))==1: resolved=active_lower[target.lower()][0]
+              elif target in alias_of: resolved=alias_of[target]
+              elif target.lower() in alias_of: resolved=alias_of[target.lower()]
+              if resolved and pid not in used:
+                  alias_of[pid]=resolved; provider_hits+=1
+              else: provider_missing.append((pid,target))
 
-          print(f'Provider mappings loaded: {len(provider):,}; applied: {provider_hits:,}; target missing/ambiguous: {provider_missing:,}')
-          print(f'Canonical exact-ID aliases: {canonical_hits:,}; total aliases: {len(alias_of):,}')
+          print(f'Case aliases: {case_hits:,}; canonical: {canonical_hits:,}; guide/feed aliases: {guide_hits+feed_hits:,}')
+          print(f'Provider mappings loaded: {len(provider):,}; applied: {provider_hits:,}; unresolved: {len(provider_missing):,}')
+          if provider_missing: print('Unresolved provider mappings:', provider_missing[:50])
+          print(f'Total aliases: {len(alias_of):,}')
 
           with open('guide.xml','w',encoding='utf-8') as f:
               f.write('<?xml version="1.0" encoding="UTF-8"?>\n<tv generator-info-name="CaptainStrand TiviMax Multi-Source EPG">\n')
@@ -109,7 +154,7 @@ jobs:
           gzip -9 -c guide.xml > guide.xml.gz
           gzip -t guide.xml.gz
           ls -lh guide.xml.gz
-          rm -f guide.xml epgpw.xml epgpw.xml.gz epgshare.xml epgshare.xml.gz channels.json
+          rm -f guide.xml epgpw.xml epgpw.xml.gz epgshare.xml epgshare.xml.gz channels.json feeds.json guides.json
 
       - name: Commit refreshed guide
         shell: bash
@@ -120,9 +165,4 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add guide.xml.gz
-          if git diff --cached --quiet; then
-            echo 'Guide unchanged.'
-          else
-            git commit -m 'Refresh worldwide XMLTV guide with provider mappings'
-            git push
-          fi
+          if git diff --cached --quiet; then echo 'Guide unchanged.'; else git commit -m 'Refresh feed-aware worldwide XMLTV guide'; git push; fi
