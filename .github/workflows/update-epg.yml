@@ -13,18 +13,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Download worldwide XMLTV sources
+      - name: Download EPG and channel databases
         shell: bash
         run: |
           set -euo pipefail
-          curl --fail --location --retry 4 --retry-delay 10 -o epgpw.xml.gz 'https://epg.pw/xmltv/epg.xml.gz'
+          curl --fail --location --retry 4 -o epgpw.xml.gz 'https://epg.pw/xmltv/epg.xml.gz'
           gzip -t epgpw.xml.gz && gunzip -c epgpw.xml.gz > epgpw.xml
-          if curl --fail --location --retry 3 --retry-delay 10 -o epgshare.xml.gz 'https://epgshare01.online/epgshare01/epg_ripper_ALL_SOURCES1.xml.gz'; then
+          if curl --fail --location --retry 3 -o epgshare.xml.gz 'https://epgshare01.online/epgshare01/epg_ripper_ALL_SOURCES1.xml.gz'; then
             gzip -t epgshare.xml.gz && gunzip -c epgshare.xml.gz > epgshare.xml
-          else
-            echo 'EPGShare unavailable; continuing with EPG.pw.'
           fi
-      - name: Merge programme window and add targeted aliases
+          curl --fail --location --retry 3 -o channels.json 'https://iptv-org.github.io/api/channels.json'
+
+      - name: Merge programme window and provider-targeted aliases
         shell: bash
         run: |
           set -euo pipefail
@@ -40,7 +40,8 @@ jobs:
               if not m:return None
               x=datetime.strptime(m.group(1),'%Y%m%d%H%M%S'); o=m.group(2)
               if not o:return x.replace(tzinfo=timezone.utc)
-              sign=1 if o[0]=='+' else -1; d=timedelta(hours=int(o[1:3]),minutes=int(o[3:5]))*sign
+              sign=1 if o[0]=='+' else -1
+              d=timedelta(hours=int(o[1:3]),minutes=int(o[3:5]))*sign
               return x.replace(tzinfo=timezone(d)).astimezone(timezone.utc)
           for fn in inputs:
               print('Reading',fn)
@@ -53,21 +54,18 @@ jobs:
                       cid=e.get('channel'); start=e.get('start',''); stop=e.get('stop',''); when=dt(start)
                       if cid and when and low<=when<=high:
                           k=(cid,start,stop)
-                          if k not in programmes: programmes[k]=ET.tostring(e,encoding='unicode'); used.add(cid)
+                          if k not in programmes:
+                              programmes[k]=ET.tostring(e,encoding='unicode'); used.add(cid)
                   e.clear()
-          # Build conservative aliases. XMLTV requires programme channel= to match channel id.
-          # 1) lowercase ID aliases; 2) canonical iptv-org names/alt_names when exactly one
-          # active source channel shares that normalized name. Ambiguous names are skipped.
+
           alias_of={}; existing=set(channels)
-          for cid in list(used):
+          # Safe case aliases.
+          for cid in used:
               aid=cid.lower()
               if aid!=cid and aid not in existing: alias_of.setdefault(aid,cid)
-          def norm(s): return re.sub(r'[^a-z0-9]+','', (s or '').lower())
-          canon=[]
-          if os.path.exists('channels.json'):
-              try: canon=json.load(open('channels.json',encoding='utf-8'))
-              except Exception as ex: print('channels.json ignored:',ex)
-          # Match canonical database IDs directly to source IDs case-insensitively first.
+
+          # Canonical database aliases, refreshed every build.
+          canon=json.load(open('channels.json',encoding='utf-8'))
           active_lower={}
           for cid in used: active_lower.setdefault(cid.lower(),[]).append(cid)
           canonical_hits=0
@@ -77,44 +75,28 @@ jobs:
               hits=active_lower.get(cid.lower(),[])
               if len(hits)==1:
                   alias_of[cid]=hits[0]; canonical_hits+=1
-          # Name-based matching is only accepted when the normalized name is unique on both
-          # sides and country suffix agrees where available. This avoids wrong local/network EPGs.
-          src_names={}
-          for cid in used:
-              try:
-                  e=ET.fromstring(channels[cid]); names=[x.text for x in e.findall('.//display-name') if x.text]
-              except Exception: names=[]
-              for n in names:
-                  z=norm(n)
-                  if z: src_names.setdefault(z,set()).add(cid)
-          candidate={}
-          for c in canon:
-              target=c.get('id'); country=(c.get('country') or '').lower()
-              if not target or target in used or target in alias_of: continue
-              names=[c.get('name')]+(c.get('alt_names') or [])
-              hits=set()
-              for n in names:
-                  z=norm(n)
-                  if z and len(src_names.get(z,set()))==1: hits |= src_names[z]
-              if country:
-                  same={x for x in hits if x.lower().endswith('.'+country) or ('.'+country+'@') in x.lower()}
-                  if same: hits=same
-              if len(hits)==1: candidate[target]=next(iter(hits))
-          # Prevent many canonical IDs from being guessed onto one source schedule unless they
-          # were exact-ID aliases. This is especially important for regional/local channels.
-          rev={}
-          for a,s in candidate.items(): rev.setdefault(s,[]).append(a)
-          name_hits=0
-          for a,s in candidate.items():
-              if len(rev[s])==1: alias_of[a]=s; name_hits+=1
-          print('Aliases total:',len(alias_of),'canonical-id:',canonical_hits,'unique-name:',name_hits)
+
+          # Provider-specific mappings derived from the user's TiviMax playlist.
+          provider=json.load(open('provider_aliases.json',encoding='utf-8')) if os.path.exists('provider_aliases.json') else {}
+          provider_hits=0; provider_missing=0
+          for provider_id,target in provider.items():
+              candidates=[]
+              if target in used: candidates=[target]
+              elif target.lower() in active_lower: candidates=active_lower[target.lower()]
+              if len(candidates)==1 and provider_id not in used:
+                  alias_of[provider_id]=candidates[0]; provider_hits+=1
+              else: provider_missing+=1
+
+          print(f'Provider mappings loaded: {len(provider):,}; applied: {provider_hits:,}; target missing/ambiguous: {provider_missing:,}')
+          print(f'Canonical exact-ID aliases: {canonical_hits:,}; total aliases: {len(alias_of):,}')
+
           with open('guide.xml','w',encoding='utf-8') as f:
               f.write('<?xml version="1.0" encoding="UTF-8"?>\n<tv generator-info-name="CaptainStrand TiviMax Multi-Source EPG">\n')
               for cid in sorted(used):
                   if cid in channels:f.write(channels[cid]+'\n')
               for aid,src in sorted(alias_of.items()):
-                  if src not in channels: continue
-                  e=ET.fromstring(channels[src]); e.set('id',aid); f.write(ET.tostring(e,encoding='unicode')+'\n')
+                  if src in channels:
+                      e=ET.fromstring(channels[src]); e.set('id',aid); f.write(ET.tostring(e,encoding='unicode')+'\n')
               for k in sorted(programmes,key=lambda x:(x[1],x[0] or '')): f.write(programmes[k]+'\n')
               bysrc={}
               for a,s in alias_of.items(): bysrc.setdefault(s,[]).append(a)
@@ -127,7 +109,8 @@ jobs:
           gzip -9 -c guide.xml > guide.xml.gz
           gzip -t guide.xml.gz
           ls -lh guide.xml.gz
-          rm -f guide.xml epgpw.xml epgpw.xml.gz epgshare.xml epgshare.xml.gz
+          rm -f guide.xml epgpw.xml epgpw.xml.gz epgshare.xml epgshare.xml.gz channels.json
+
       - name: Commit refreshed guide
         shell: bash
         run: |
@@ -137,4 +120,9 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add guide.xml.gz
-          if git diff --cached --quiet; then echo 'Guide unchanged.'; else git commit -m 'Refresh worldwide XMLTV guide with targeted aliases'; git push; fi
+          if git diff --cached --quiet; then
+            echo 'Guide unchanged.'
+          else
+            git commit -m 'Refresh worldwide XMLTV guide with provider mappings'
+            git push
+          fi
