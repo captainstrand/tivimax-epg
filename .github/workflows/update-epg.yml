@@ -26,7 +26,7 @@ jobs:
           curl --fail --location --retry 3 -o feeds.json 'https://iptv-org.github.io/api/feeds.json'
           curl --fail --location --retry 3 -o guides.json 'https://iptv-org.github.io/api/guides.json'
 
-      - name: Merge programme window and source-name aliases
+      - name: Merge programme window and country-aware aliases
         shell: bash
         run: |
           set -euo pipefail
@@ -47,9 +47,15 @@ jobs:
               return x.replace(tzinfo=timezone(d)).astimezone(timezone.utc)
           def norm(s):
               s=unicodedata.normalize('NFKD',s or '').encode('ascii','ignore').decode().lower()
-              s=re.sub(r'\b(hdtv|hd|fhd|uhd|4k|usa|us|uk|canada|ca|channel|network)\b',' ',s)
+              s=re.sub(r'\b(hdtv|hd|fhd|uhd|4k|channel|network)\b',' ',s)
               s=re.sub(r'\b(eastern|east|western|west|pacific|feed)\b',' ',s)
               return re.sub(r'[^a-z0-9]+','',s)
+          def id_country(cid):
+              # XMLTV/source IDs commonly end in .us/.uk/.ca etc; provider IDs may have
+              # a numeric duplicate suffix such as History.ca2 or IFC.HD.us2.
+              base=(cid or '').split('@',1)[0]
+              m=re.search(r'\.([A-Za-z]{2})(?:\d+)?$',base)
+              return m.group(1).upper() if m else None
           for fn in inputs:
               print('Reading',fn)
               for _,e in ET.iterparse(fn,events=('end',)):
@@ -67,13 +73,14 @@ jobs:
                   e.clear()
 
           canon=json.load(open('channels.json',encoding='utf-8')); feeds=json.load(open('feeds.json',encoding='utf-8')); guides=json.load(open('guides.json',encoding='utf-8'))
+          canon_by_id={c.get('id'):c for c in canon if c.get('id')}
+          canonical_country={cid:(c.get('country') or '').upper() or id_country(cid) for cid,c in canon_by_id.items()}
           alias_of={}; existing=set(channels); active_lower={}; name_index={}
           for cid in used:
               active_lower.setdefault(cid.lower(),[]).append(cid)
-              vals=[cid]+channel_names.get(cid,[])
-              for v in vals:
+              for v in [cid]+channel_names.get(cid,[]):
                   n=norm(v)
-                  if n: name_index.setdefault(n,set()).add(cid)
+                  if n:name_index.setdefault(n,set()).add(cid)
           def add(alias,target):
               if not alias or alias in used or alias in existing or alias in alias_of:return False
               hits=[target] if target in used else active_lower.get((target or '').lower(),[])
@@ -87,9 +94,9 @@ jobs:
           for c in canon:
               cid=c.get('id')
               if cid and add(cid,cid):canonical_hits+=1
-          guide_hits=0; seen=set()
+          guide_hits=0;seen=set()
           for g in guides:
-              base=g.get('channel'); feed=g.get('feed')
+              base=g.get('channel');feed=g.get('feed')
               if not base:continue
               for gid in [base]+([base+'@'+feed] if feed else []):
                   if gid in seen:continue
@@ -98,39 +105,52 @@ jobs:
                       if add(gid,t):guide_hits+=1;break
           feed_hits=0
           for f in feeds:
-              base=f.get('channel'); fid=f.get('id')
+              base=f.get('channel');fid=f.get('id')
               if not base or not fid:continue
               gid=base+'@'+fid
               for t in (gid,base):
                   if add(gid,t):feed_hits+=1;break
 
-          # Provider targets can differ radically from raw XMLTV IDs. Resolve the canonical
-          # target to its IPTV-org names, then uniquely match those names against active XMLTV channels.
-          canon_by_id={c.get('id'):c for c in canon if c.get('id')}
           provider=json.load(open('provider_aliases.json',encoding='utf-8')) if os.path.exists('provider_aliases.json') else {}
-          provider_hits=0; direct_hits=0; name_hits=0; provider_missing=[]
+          provider_hits=0;direct_hits=0;name_hits=0;country_rejects=0;provider_missing=[]
           for pid,target in provider.items():
-              resolved=None; method=None
-              if target in used:resolved=target;method='direct'
-              elif len(active_lower.get(target.lower(),[]))==1:resolved=active_lower[target.lower()][0];method='direct'
-              elif target in alias_of:resolved=alias_of[target];method='direct'
-              else:
+              resolved=None;method=None
+              expected=canonical_country.get(target) or id_country(target) or id_country(pid)
+              # Direct resolution is still allowed only if the resulting source ID is
+              # country-compatible when both sides expose a country suffix.
+              direct=[]
+              if target in used:direct=[target]
+              elif len(active_lower.get(target.lower(),[]))==1:direct=active_lower[target.lower()]
+              elif target in alias_of:direct=[alias_of[target]]
+              if direct:
+                  cand=direct[0]; got=id_country(cand)
+                  if not expected or not got or expected==got:resolved=cand;method='direct'
+                  else:country_rejects+=1
+              if not resolved:
                   c=canon_by_id.get(target,{})
                   candidates=[target,c.get('name','')]+(c.get('alt_names') or [])
                   hits=set()
                   for candidate in candidates:
                       n=norm(candidate)
-                      if n and len(name_index.get(n,set()))==1:hits.update(name_index[n])
+                      if not n:continue
+                      for h in name_index.get(n,set()):
+                          got=id_country(h)
+                          if expected and got and expected!=got:
+                              country_rejects+=1;continue
+                          # If country is known, require the source ID to expose it. This
+                          # prevents a US provider channel silently becoming a UK/CA feed.
+                          if expected and not got:continue
+                          hits.add(h)
                   if len(hits)==1:resolved=next(iter(hits));method='name'
               if resolved and pid not in used:
                   alias_of[pid]=resolved;provider_hits+=1
                   if method=='name':name_hits+=1
                   else:direct_hits+=1
-                  print('Provider resolved:',pid,'=>',resolved,'from',target,'via',method)
-              else:provider_missing.append((pid,target))
+                  print('Provider resolved:',pid,'=>',resolved,'from',target,'country',expected,'via',method)
+              else:provider_missing.append((pid,target,expected))
 
           print(f'Case aliases: {case_hits:,}; canonical: {canonical_hits:,}; guide/feed: {guide_hits+feed_hits:,}')
-          print(f'Provider mappings: {len(provider):,}; applied: {provider_hits:,} (direct {direct_hits:,}, source-name {name_hits:,}); unresolved: {len(provider_missing):,}')
+          print(f'Provider mappings: {len(provider):,}; applied: {provider_hits:,} (direct {direct_hits:,}, country-safe name {name_hits:,}); unresolved: {len(provider_missing):,}; wrong-country candidates rejected: {country_rejects:,}')
           if provider_missing:print('Still unresolved:',provider_missing[:50])
           print(f'Total aliases: {len(alias_of):,}')
           with open('guide.xml','w',encoding='utf-8') as f:
@@ -163,4 +183,4 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add guide.xml.gz
-          if git diff --cached --quiet; then echo 'Guide unchanged.'; else git commit -m 'Refresh source-name-matched worldwide XMLTV guide'; git push; fi
+          if git diff --cached --quiet; then echo 'Guide unchanged.'; else git commit -m 'Refresh country-aware worldwide XMLTV guide'; git push; fi
