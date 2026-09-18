@@ -31,7 +31,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import os,re,json,unicodedata
+          import os,re,json,unicodedata,difflib
           import xml.etree.ElementTree as ET
           from datetime import datetime,timezone,timedelta
           now=datetime.now(timezone.utc); low=now-timedelta(days=1); high=now+timedelta(days=7)
@@ -47,12 +47,11 @@ jobs:
               return x.replace(tzinfo=timezone(d)).astimezone(timezone.utc)
           def norm(s):
               s=unicodedata.normalize('NFKD',s or '').encode('ascii','ignore').decode().lower()
-              s=re.sub(r'\b(hdtv|hd|fhd|uhd|4k|channel|network)\b',' ',s)
-              s=re.sub(r'\b(eastern|east|western|west|pacific|feed)\b',' ',s)
+              s=re.sub(r'^(?:uk|us|usa|ca|canada|au|nz|ie|fr|de|es|it|pt|nl|be|se|no|dk|fi|pl|gr|in|za)\s*[:|\-]\s*','',s)
+              s=s.replace('&',' and ')
+              s=re.sub(r'\b(hdtv|hd|fhd|uhd|4k|1080p|720p|channel|network|tv)\b',' ',s)
               return re.sub(r'[^a-z0-9]+','',s)
           def id_country(cid):
-              # XMLTV/source IDs commonly end in .us/.uk/.ca etc; provider IDs may have
-              # a numeric duplicate suffix such as History.ca2 or IFC.HD.us2.
               base=(cid or '').split('@',1)[0]
               m=re.search(r'\.([A-Za-z]{2})(?:\d+)?$',base)
               return m.group(1).upper() if m else None
@@ -75,12 +74,12 @@ jobs:
           canon=json.load(open('channels.json',encoding='utf-8')); feeds=json.load(open('feeds.json',encoding='utf-8')); guides=json.load(open('guides.json',encoding='utf-8'))
           canon_by_id={c.get('id'):c for c in canon if c.get('id')}
           canonical_country={cid:(c.get('country') or '').upper() or id_country(cid) for cid,c in canon_by_id.items()}
-          alias_of={}; existing=set(channels); active_lower={}; name_index={}
+          alias_of={}; existing=set(channels); active_lower={}; name_index={}; source_norms={}
           for cid in used:
               active_lower.setdefault(cid.lower(),[]).append(cid)
-              for v in [cid]+channel_names.get(cid,[]):
-                  n=norm(v)
-                  if n:name_index.setdefault(n,set()).add(cid)
+              vals=[cid]+channel_names.get(cid,[])
+              source_norms[cid]=set(filter(None,(norm(v) for v in vals)))
+              for n in source_norms[cid]:name_index.setdefault(n,set()).add(cid)
           def add(alias,target):
               if not alias or alias in used or alias in existing or alias in alias_of:return False
               hits=[target] if target in used else active_lower.get((target or '').lower(),[])
@@ -116,8 +115,6 @@ jobs:
           for pid,target in provider.items():
               resolved=None;method=None
               expected=canonical_country.get(target) or id_country(target) or id_country(pid)
-              # Direct resolution is still allowed only if the resulting source ID is
-              # country-compatible when both sides expose a country suffix.
               direct=[]
               if target in used:direct=[target]
               elif len(active_lower.get(target.lower(),[]))==1:direct=active_lower[target.lower()]
@@ -135,10 +132,7 @@ jobs:
                       if not n:continue
                       for h in name_index.get(n,set()):
                           got=id_country(h)
-                          if expected and got and expected!=got:
-                              country_rejects+=1;continue
-                          # If country is known, require the source ID to expose it. This
-                          # prevents a US provider channel silently becoming a UK/CA feed.
+                          if expected and got and expected!=got:country_rejects+=1;continue
                           if expected and not got:continue
                           hits.add(h)
                   if len(hits)==1:resolved=next(iter(hits));method='name'
@@ -146,12 +140,54 @@ jobs:
                   alias_of[pid]=resolved;provider_hits+=1
                   if method=='name':name_hits+=1
                   else:direct_hits+=1
-                  print('Provider resolved:',pid,'=>',resolved,'from',target,'country',expected,'via',method)
               else:provider_missing.append((pid,target,expected))
+
+          # ADDITIVE playlist-aware matching. It never replaces an existing/source/provider alias.
+          playlist=json.load(open('provider_channels.json',encoding='utf-8')) if os.path.exists('provider_channels.json') else []
+          playlist_exact=0; playlist_fuzzy=0; playlist_ambiguous=0; playlist_unmatched=0; playlist_existing=0
+          country_buckets={}
+          for cid in used:
+              country_buckets.setdefault(id_country(cid),[]).append(cid)
+          for row in playlist:
+              pid=(row.get('id') or '').strip(); pname=(row.get('name') or '').strip()
+              if not pid:continue
+              if pid in used or pid in existing or pid in alias_of:
+                  playlist_existing+=1;continue
+              expected=id_country(pid); pn=norm(pname)
+              if not pn:
+                  playlist_unmatched+=1;continue
+              pool=country_buckets.get(expected,[]) if expected else list(used)
+              # Country is a hard guardrail whenever provider ID supplies one.
+              exact=set()
+              for h in name_index.get(pn,set()):
+                  got=id_country(h)
+                  if expected and got!=expected:continue
+                  exact.add(h)
+              if len(exact)==1:
+                  alias_of[pid]=next(iter(exact));playlist_exact+=1;continue
+              if len(exact)>1:
+                  playlist_ambiguous+=1;continue
+              # Conservative fuzzy comparison. Require very high similarity and a clear
+              # gap from runner-up so common/local station names are not guessed.
+              scored=[]
+              for h in pool:
+                  best=0.0
+                  for sn in source_norms.get(h,()):
+                      if not sn:continue
+                      r=difflib.SequenceMatcher(None,pn,sn).ratio()
+                      if r>best:best=r
+                  if best>=0.90:scored.append((best,h))
+              scored.sort(reverse=True)
+              if scored and scored[0][0]>=0.94 and (len(scored)==1 or scored[0][0]-scored[1][0]>=0.06):
+                  alias_of[pid]=scored[0][1];playlist_fuzzy+=1
+              elif scored:
+                  playlist_ambiguous+=1
+              else:
+                  playlist_unmatched+=1
 
           print(f'Case aliases: {case_hits:,}; canonical: {canonical_hits:,}; guide/feed: {guide_hits+feed_hits:,}')
           print(f'Provider mappings: {len(provider):,}; applied: {provider_hits:,} (direct {direct_hits:,}, country-safe name {name_hits:,}); unresolved: {len(provider_missing):,}; wrong-country candidates rejected: {country_rejects:,}')
-          if provider_missing:print('Still unresolved:',provider_missing[:50])
+          print(f'Playlist channels: {len(playlist):,}; already covered: {playlist_existing:,}; exact-name added: {playlist_exact:,}; high-confidence fuzzy added: {playlist_fuzzy:,}; ambiguous held back: {playlist_ambiguous:,}; unmatched: {playlist_unmatched:,}')
           print(f'Total aliases: {len(alias_of):,}')
           with open('guide.xml','w',encoding='utf-8') as f:
               f.write('<?xml version="1.0" encoding="UTF-8"?>\n<tv generator-info-name="CaptainStrand TiviMax Multi-Source EPG">\n')
@@ -183,4 +219,4 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add guide.xml.gz
-          if git diff --cached --quiet; then echo 'Guide unchanged.'; else git commit -m 'Refresh country-aware worldwide XMLTV guide'; git push; fi
+          if git diff --cached --quiet; then echo 'Guide unchanged.'; else git commit -m 'Refresh playlist-aware worldwide XMLTV guide'; git push; fi
