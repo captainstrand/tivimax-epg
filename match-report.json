@@ -1,0 +1,2517 @@
+{
+  "playlist_entries": 8626,
+  "entries_with_tvg_id": 1518,
+  "unique_tvg_ids": 1297,
+  "source_channels": 42718,
+  "matched_entries": 161,
+  "published_channels": 79,
+  "matched_source_ids_with_programmes": 75,
+  "match_methods": {
+    "id-case": 12,
+    "id-exact": 149,
+    "unmatched": 8465
+  },
+  "compressed_bytes": 57232,
+  "unmatched_examples": [
+    {
+      "id": "tnt.us",
+      "name": "US: TNT",
+      "group": "USA Premium"
+    },
+    {
+      "id": "hgtv.us",
+      "name": "US: HGTV",
+      "group": "USA Premium"
+    },
+    {
+      "id": "tbs.us",
+      "name": "US: TBS (D)",
+      "group": "USA Premium"
+    },
+    {
+      "id": "usanetwork.us",
+      "name": "US: USA Network (D)",
+      "group": "USA Premium"
+    },
+    {
+      "id": "comedycentral.us",
+      "name": "US: Comedy Central",
+      "group": "USA Premium"
+    },
+    {
+      "id": "aande.us",
+      "name": "US: A&E",
+      "group": "USA Premium"
+    },
+    {
+      "id": "historychannel.us",
+      "name": "US: History Channel (D)",
+      "group": "USA Premium"
+    },
+    {
+      "id": "WIVB",
+      "name": "US: CBS (Buffalo)",
+      "group": "USA Premium"
+    },
+    {
+      "id": "foodnetwork.us",
+      "name": "US: Food Network",
+      "group": "USA Premium"
+    },
+    {
+      "id": "tlc.us",
+      "name": "US: TLC",
+      "group": "USA Premium"
+    },
+    {
+      "id": "nbcwnbc.us",
+      "name": "US: NBC (New York)",
+      "group": "USA Premium"
+    },
+    {
+      "id": "8987",
+      "name": "US: Game Show Network",
+      "group": "USA Premium"
+    },
+    {
+      "id": "abcwkbw.us",
+      "name": "US: ABC (Buffalo)",
+      "group": "USA Premium"
+    },
+    {
+      "id": "hallmark.us",
+      "name": "US: Hallmark Channel (D)",
+      "group": "USA Premium"
+    },
+    {
+      "id": "fx.us",
+      "name": "US: FX",
+      "group": "USA Premium"
+    },
+    {
+      "id": "investigationdiscovery.us",
+      "name": "US: Discovery ID",
+      "group": "USA Premium"
+    },
+    {
+      "id": "reelzchannel.us",
+      "name": "US: REELZ",
+      "group": "USA Premium"
+    },
+    {
+      "id": "lifetimenetwork.us",
+      "name": "US: Lifetime Network",
+      "group": "USA Premium"
+    },
+    {
+      "id": "amc.us",
+      "name": "US: AMC",
+      "group": "USA Premium"
+    },
+    {
+      "id": "discoverychannel.us",
+      "name": "US: Discovery",
+      "group": "USA Premium"
+    },
+    {
+      "id": "fxx.us",
+      "name": "US: FXX",
+      "group": "USA Premium"
+    },
+    {
+      "id": "paramountnetwork.us",
+      "name": "US: Paramount Network (D)",
+      "group": "USA Premium"
+    },
+    {
+      "id": "tvlandeast.us",
+      "name": "US: TV Land",
+      "group": "USA Premium"
+    },
+    {
+      "id": "starzencoreaction.us",
+      "name": "US: Starz Encore Action",
+      "group": "US Cinema"
+    },
+    {
+      "id": "bravo.us",
+      "name": "US: Bravo",
+      "group": "USA Premium"
+    },
+    {
+      "id": "natgeo.us",
+      "name": "US: National Geographic",
+      "group": "USA Premium"
+    },
+    {
+      "id": "bet.us",
+      "name": "US: BET",
+      "group": "USA Premium"
+    },
+    {
+      "id": "ion.us",
+      "name": "US: iON TV",
+      "group": "USA Premium"
+    },
+    {
+      "id": "mtv.us",
+      "name": "US: MTV",
+      "group": "USA Premium"
+    },
+    {
+      "id": "hbo.us",
+      "name": "US: HBO",
+      "group": "US Cinema"
+    },
+    {
+      "id": "showtime.us",
+      "name": "US: Showtime",
+      "group": "US Cinema"
+    },
+    {
+      "id": "cartoonnetwork.us",
+      "name": "US: Cartoon Network (D)",
+      "group": "USA Premium"
+    },
+    {
+      "id": "fox29wutv.us",
+      "name": "US: FOX 29 Buffalo",
+      "group": "USA Premium"
+    },
+    {
+      "id": "bouncetv.us",
+      "name": "US: Bounce TV",
+      "group": "USA Premium"
+    },
+    {
+      "id": "freeform.us",
+      "name": "US: Freeform",
+      "group": "USA Premium"
+    },
+    {
+      "id": "tvone.us",
+      "name": "US: TV ONE",
+      "group": "USA Premium"
+    },
+    {
+      "id": "Oxygen - Pacific Feed",
+      "name": "US: Oxygen (West)",
+      "group": "USA Premium"
+    },
+    {
+      "id": "grit.us",
+      "name": "US: GRIT",
+      "group": "USA Premium"
+    },
+    {
+      "id": "magnolianetwork.us",
+      "name": "US: Magnolia Network (D)",
+      "group": "USA Premium"
+    },
+    {
+      "id": "syfy.us",
+      "name": "US: SYFY",
+      "group": "USA Premium"
+    },
+    {
+      "id": "insp.us",
+      "name": "US: INSP TV",
+      "group": "USA Premium"
+    },
+    {
+      "id": "hallmarkmoviesmysteries.us",
+      "name": "US: Hallmark Movies & Mysteries",
+      "group": "USA Premium"
+    },
+    {
+      "id": "disneyjunior.us",
+      "name": "US: Disney Junior",
+      "group": "USA Premium"
+    },
+    {
+      "id": "metv.us",
+      "name": "US: ME TV",
+      "group": "USA Premium"
+    },
+    {
+      "id": "nbc6wtvj.us",
+      "name": "US: NBC Miami (WTVJ)",
+      "group": "USA Premium"
+    },
+    {
+      "id": "nickelodeon.us",
+      "name": "US: Nickelodeon",
+      "group": "USA Premium"
+    },
+    {
+      "id": "bether.us",
+      "name": "US: BET Her",
+      "group": "USA Premium"
+    },
+    {
+      "id": "starz.us",
+      "name": "US: Starz",
+      "group": "US Cinema"
+    },
+    {
+      "id": "cookingchannel.us",
+      "name": "US: Cooking Channel",
+      "group": "USA Premium"
+    },
+    {
+      "id": "nicktoons.us",
+      "name": "US: Nicktoons",
+      "group": "USA Premium"
+    },
+    {
+      "id": "trutv.us",
+      "name": "US: TruTV",
+      "group": "USA Premium"
+    },
+    {
+      "id": "travel.us",
+      "name": "US: Travel Channel",
+      "group": "USA Premium"
+    },
+    {
+      "id": "discoveryscience.us",
+      "name": "US: Discovery Science",
+      "group": "USA Premium"
+    },
+    {
+      "id": "lmn.us",
+      "name": "US: Lifetime Movie Network (D)",
+      "group": "US Cinema"
+    },
+    {
+      "id": "eentertainment.us",
+      "name": "US: E! Entertainment",
+      "group": "USA Premium"
+    },
+    {
+      "id": "hbozone.us",
+      "name": "US: HBO Zone",
+      "group": "US Cinema"
+    },
+    {
+      "id": "vh1.us",
+      "name": "US: VH1",
+      "group": "USA Premium"
+    },
+    {
+      "id": "animalplanet.us",
+      "name": "US: Animal Planet",
+      "group": "USA Premium"
+    },
+    {
+      "id": "wetv.us",
+      "name": "US: WE TV",
+      "group": "USA Premium"
+    },
+    {
+      "id": "8255",
+      "name": "US: Adult Swim",
+      "group": "USA Premium"
+    },
+    {
+      "id": "showtime2.us",
+      "name": "US: Showtime 2",
+      "group": "US Cinema"
+    },
+    {
+      "id": "cmt.us",
+      "name": "US: CMT",
+      "group": "USA Premium"
+    },
+    {
+      "id": "mgmhits.us",
+      "name": "US: MGM+ Hits",
+      "group": "US Cinema"
+    },
+    {
+      "id": "oprahwinfreynetwork.us",
+      "name": "US: OWN",
+      "group": "USA Premium"
+    },
+    {
+      "id": "cinemax.us",
+      "name": "US: Cinemax (East)",
+      "group": "US Cinema"
+    },
+    {
+      "id": "destinationamerica.us",
+      "name": "US: Destination America",
+      "group": "USA Premium"
+    },
+    {
+      "id": "nickjr.us",
+      "name": "US: Nick Jr (D)",
+      "group": "USA Premium"
+    },
+    {
+      "id": "hbocomedy.us",
+      "name": "US: HBO Comedy",
+      "group": "US Cinema"
+    },
+    {
+      "id": "boomerang.us",
+      "name": "US: Boomerang",
+      "group": "USA Premium"
+    },
+    {
+      "id": "smithsonianchannel.us",
+      "name": "US: Smithsonian Channel",
+      "group": "USA Premium"
+    },
+    {
+      "id": "1786",
+      "name": "US: HBO Drama",
+      "group": "US Cinema"
+    },
+    {
+      "id": "showtimeextreme.us",
+      "name": "US: Showtime Extreme",
+      "group": "US Cinema"
+    },
+    {
+      "id": "hallmarkfamily.us",
+      "name": "US: Hallmark Family",
+      "group": "USA Premium"
+    },
+    {
+      "id": "turnerclassicmovies.us",
+      "name": "US: Turner Classic Movies",
+      "group": "US Cinema"
+    },
+    {
+      "id": "3778",
+      "name": "US: HBO Hits",
+      "group": "US Cinema"
+    },
+    {
+      "id": "bbcamerica.us",
+      "name": "US: BBC America",
+      "group": "USA Premium"
+    },
+    {
+      "id": "citytvtoronto.ca",
+      "name": "CA: CityTV Toronto (D)",
+      "group": "Canada"
+    },
+    {
+      "id": "ctvtoronto.ca",
+      "name": "CA: CTV Toronto (CFTO)",
+      "group": "Canada"
+    },
+    {
+      "id": "natgeowild.us",
+      "name": "US: National Geographic Wild",
+      "group": "USA Premium"
+    },
+    {
+      "id": "fyi.us",
+      "name": "US: FYI Network",
+      "group": "USA Premium"
+    },
+    {
+      "id": "americanheroeschannel.us",
+      "name": "US: AHC",
+      "group": "USA Premium"
+    },
+    {
+      "id": "buzzertv.us",
+      "name": "US: BUZZR (D)",
+      "group": "USA Premium"
+    },
+    {
+      "id": "starzedge.us",
+      "name": "US: Starz Edge",
+      "group": "US Cinema"
+    },
+    {
+      "id": "history2.ca",
+      "name": "CA: History2",
+      "group": "Canada"
+    },
+    {
+      "id": "mgm.us",
+      "name": "US: MGM+",
+      "group": "US Cinema"
+    },
+    {
+      "id": "court.us",
+      "name": "US: COURT TV",
+      "group": "USA Premium"
+    },
+    {
+      "id": "discoverylife.us",
+      "name": "US: Discovery Life",
+      "group": "USA Premium"
+    },
+    {
+      "id": "starzencore.us",
+      "name": "US: Starz Encore",
+      "group": "US Cinema"
+    },
+    {
+      "id": "cozitv.us",
+      "name": "US: COZI",
+      "group": "USA Premium"
+    },
+    {
+      "id": "starzencoreblack.us",
+      "name": "US: Starz Encore Black",
+      "group": "US Cinema"
+    },
+    {
+      "id": "tlc.ca",
+      "name": "CA: TLC",
+      "group": "Canada"
+    },
+    {
+      "id": "sundancetv.us",
+      "name": "US: Sundance TV (D)",
+      "group": "US Cinema"
+    },
+    {
+      "id": "disneychannel.us",
+      "name": "US: Disney Channel",
+      "group": "USA Premium"
+    },
+    {
+      "id": "disneyxd.us",
+      "name": "US: Disney XD",
+      "group": "USA Premium"
+    },
+    {
+      "id": "comet.us",
+      "name": "US: COMET",
+      "group": "USA Premium"
+    },
+    {
+      "id": "mgmmarquee.us",
+      "name": "US: MGM+ Marquee",
+      "group": "US Cinema"
+    },
+    {
+      "id": "showtimeshowcase.us",
+      "name": "US: Showtime Showcase",
+      "group": "US Cinema"
+    },
+    {
+      "id": "vice.us",
+      "name": "US: Viceland",
+      "group": "USA Premium"
+    },
+    {
+      "id": "globaltoronto.ca",
+      "name": "CA: Global Toronto",
+      "group": "Canada"
+    },
+    {
+      "id": "cottagelife.ca",
+      "name": "CA: Cottage Life",
+      "group": "Canada"
+    },
+    {
+      "id": "WGN",
+      "name": "US: Antenna TV",
+      "group": "USA Premium"
+    },
+    {
+      "id": "cleo.us",
+      "name": "US: Cleo TV",
+      "group": "USA Premium"
+    },
+    {
+      "id": "fxm.us",
+      "name": "US: FXM",
+      "group": "US Cinema"
+    },
+    {
+      "id": "investigation.ca",
+      "name": "CA: Investigation Discovery (D)",
+      "group": "Canada"
+    },
+    {
+      "id": "starzwest.us",
+      "name": "US: Starz West",
+      "group": "US Cinema"
+    },
+    {
+      "id": "tvlandwest.us",
+      "name": "US: TV Land (West)",
+      "group": "USA Premium"
+    },
+    {
+      "id": "ctvhalifax.ca",
+      "name": "CA: CTV Halifax",
+      "group": "Canada"
+    },
+    {
+      "id": "lafftv.us",
+      "name": "US: LAFF TV",
+      "group": "USA Premium"
+    },
+    {
+      "id": "revolt.us",
+      "name": "US: REVOLT (D)",
+      "group": "USA Premium"
+    },
+    {
+      "id": "WGNWGN9.us",
+      "name": "US: WGN 9 Chicago",
+      "group": "USA Premium"
+    },
+    {
+      "id": "ctvdramachannel.ca",
+      "name": "CA: CTV Drama",
+      "group": "Canada"
+    },
+    {
+      "id": "amzn1.dv.gti.d4b4f083-dcc7-19e6-dd4b-ae1e1736ff31",
+      "name": "CA: Adult Swim",
+      "group": "Canada"
+    },
+    {
+      "id": "bbc1.uk",
+      "name": "UK: BBC 1",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "movietime.ca",
+      "name": "CA: MovieTime",
+      "group": "Canada"
+    },
+    {
+      "id": "usanetwork.us",
+      "name": "CA: USA Network",
+      "group": "Canada"
+    },
+    {
+      "id": "cbsreality.uk",
+      "name": "UK: CBS Reality",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "starzcomedy.us",
+      "name": "US: Starz Comedy",
+      "group": "US Cinema"
+    },
+    {
+      "id": "starzencoreclassics.us",
+      "name": "US: Starz Encore Classic",
+      "group": "US Cinema"
+    },
+    {
+      "id": "starzencorewesterns.us",
+      "name": "US: Starz Encore Westerns",
+      "group": "US Cinema"
+    },
+    {
+      "id": "flavournetwork.ca",
+      "name": "CA: Flavour Network",
+      "group": "Canada"
+    },
+    {
+      "id": "smithsonian.ca",
+      "name": "CA: Smithsonian Channel",
+      "group": "Canada"
+    },
+    {
+      "id": "axstv.us",
+      "name": "US: AXS TV",
+      "group": "USA Premium"
+    },
+    {
+      "id": "homenetwork.ca",
+      "name": "CA: Home Network",
+      "group": "Canada"
+    },
+    {
+      "id": "mgmdrivein.us",
+      "name": "US: MGM+ Drive In",
+      "group": "US Cinema"
+    },
+    {
+      "id": "itv1anglia.uk",
+      "name": "UK: ITV 1",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "bravo.ca",
+      "name": "CA: Bravo (D)",
+      "group": "Canada"
+    },
+    {
+      "id": "wnetwork.ca",
+      "name": "CA: W Network",
+      "group": "Canada"
+    },
+    {
+      "id": "gameshownetwork.ca",
+      "name": "CA: Game Show Network",
+      "group": "Canada"
+    },
+    {
+      "id": "mtvclassic.us",
+      "name": "US: MTV Classic",
+      "group": "USA Premium"
+    },
+    {
+      "id": "logo.us",
+      "name": "US: Logo",
+      "group": "USA Premium"
+    },
+    {
+      "id": "dogtv.us",
+      "name": "US: Dog TV",
+      "group": "USA Premium"
+    },
+    {
+      "id": "339",
+      "name": "US: Great TV",
+      "group": "USA Premium"
+    },
+    {
+      "id": "discoveryfamily.us",
+      "name": "US: Discovery Family",
+      "group": "USA Premium"
+    },
+    {
+      "id": "abcwkbw.us",
+      "name": "CA: ABC (Buffalo)",
+      "group": "Canada"
+    },
+    {
+      "id": "starzencoresuspense.us",
+      "name": "US: Starz Encore Suspense",
+      "group": "US Cinema"
+    },
+    {
+      "id": "thecowboychannel.us",
+      "name": "US: Cowboy Channel",
+      "group": "USA Premium"
+    },
+    {
+      "id": "cbcvancouver.ca",
+      "name": "CA: CBC Vancouver",
+      "group": "Canada"
+    },
+    {
+      "id": "treehouse.ca",
+      "name": "CA: Treehouse",
+      "group": "Canada"
+    },
+    {
+      "id": "484",
+      "name": "US: TASTEMADE",
+      "group": "USA Premium"
+    },
+    {
+      "id": "ctv2ottawa.ca",
+      "name": "CA: CTV 2 Ottawa",
+      "group": "Canada"
+    },
+    {
+      "id": "fusetv.us",
+      "name": "US: Fuse",
+      "group": "USA Premium"
+    },
+    {
+      "id": "chch.ca",
+      "name": "CA: CHCH",
+      "group": "Canada"
+    },
+    {
+      "id": "awe.us",
+      "name": "US: AWE",
+      "group": "USA Premium"
+    },
+    {
+      "id": "showtimefamilyzone.us",
+      "name": "US: Showtime Family Zone",
+      "group": "US Cinema"
+    },
+    {
+      "id": "outdoorchannel.us",
+      "name": "US: Outdoor TV",
+      "group": "USA Premium"
+    },
+    {
+      "id": "aande.ca",
+      "name": "CA: A&E",
+      "group": "Canada"
+    },
+    {
+      "id": "showtimenext.us",
+      "name": "US: Showtime Next",
+      "group": "US Cinema"
+    },
+    {
+      "id": "DisneyXD.ca",
+      "name": "CA: Disney XD",
+      "group": "Canada"
+    },
+    {
+      "id": "teennick.us",
+      "name": "US: Teen Nick",
+      "group": "USA Premium"
+    },
+    {
+      "id": "tvasports.ca",
+      "name": "CA: TVA Sports 1",
+      "group": "Canada"
+    },
+    {
+      "id": "skygreats.uk",
+      "name": "UK: Sky Cinema Greats",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "starzcinema.us",
+      "name": "US: Starz Cinema",
+      "group": "US Cinema"
+    },
+    {
+      "id": "ctvmontreal.ca",
+      "name": "CA: CTV Montreal",
+      "group": "Canada"
+    },
+    {
+      "id": "ctvscifichannel.ca",
+      "name": "CA: CTV Sci Fi",
+      "group": "Canada"
+    },
+    {
+      "id": "babyfirst.us",
+      "name": "US: Baby First",
+      "group": "USA Premium"
+    },
+    {
+      "id": "teletoon.ca",
+      "name": "CA: Teletoon",
+      "group": "Canada"
+    },
+    {
+      "id": "shoxbet.us",
+      "name": "US: SHOxBET",
+      "group": "US Cinema"
+    },
+    {
+      "id": "dtour.ca",
+      "name": "CA: DTOUR",
+      "group": "Canada"
+    },
+    {
+      "id": "crave3.ca",
+      "name": "CA: Crave 3",
+      "group": "Canada"
+    },
+    {
+      "id": "natgeo.ca",
+      "name": "CA: National Geographic",
+      "group": "Canada"
+    },
+    {
+      "id": "rdinews.ca",
+      "name": "CA FR: RDI",
+      "group": "Canada"
+    },
+    {
+      "id": "globaltoronto.ca",
+      "name": "CA: Global",
+      "group": "Canada"
+    },
+    {
+      "id": "fox29wutv.us",
+      "name": "CA: FOX 29",
+      "group": "Canada"
+    },
+    {
+      "id": "showtimewomen.us",
+      "name": "US: Showtime Women",
+      "group": "US Cinema"
+    },
+    {
+      "id": "citytvvancouverqc.ca",
+      "name": "CA: CityTV Vancouver (D)",
+      "group": "Canada"
+    },
+    {
+      "id": "qvc.us",
+      "name": "US: QVC",
+      "group": "USA Premium"
+    },
+    {
+      "id": "bbcnews.uk",
+      "name": "UK: BBC News",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "screenpixwesterns.us",
+      "name": "US: ScreenPix Westerns",
+      "group": "US Cinema"
+    },
+    {
+      "id": "amzn1.dv.gti.4618597d-b597-4418-bbc5-444b33c2192f",
+      "name": "CA: Much",
+      "group": "Canada"
+    },
+    {
+      "id": "ctvvancouver.ca",
+      "name": "CA: CTV Vancouver",
+      "group": "Canada"
+    },
+    {
+      "id": "ovation.us",
+      "name": "US: OVATION",
+      "group": "USA Premium"
+    },
+    {
+      "id": "cbctoronto.ca",
+      "name": "CA: CBC (Toronto)",
+      "group": "Canada"
+    },
+    {
+      "id": "WPIX",
+      "name": "US: CW (New York)",
+      "group": "USA Premium"
+    },
+    {
+      "id": "tvasports2.ca",
+      "name": "CA: TVA Sports 2",
+      "group": "Canada"
+    },
+    {
+      "id": "bbcearth.ca",
+      "name": "CA: BBC Earth",
+      "group": "Canada"
+    },
+    {
+      "id": "ctvcomedyeast.ca",
+      "name": "CA: CTV Comedy",
+      "group": "Canada"
+    },
+    {
+      "id": "vh1west.us",
+      "name": "US: VH1 (West)",
+      "group": "USA Premium"
+    },
+    {
+      "id": "pbskids.us",
+      "name": "US: PBS Kids",
+      "group": "USA Premium"
+    },
+    {
+      "id": "cbctoronto.ca",
+      "name": "CA: CBC Toronto",
+      "group": "Canada"
+    },
+    {
+      "id": "skynews.uk",
+      "name": "UK: Sky News",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "hdnetmovies.us",
+      "name": "US: HDnet Movies",
+      "group": "US Cinema"
+    },
+    {
+      "id": "cbcwinnipeg.ca",
+      "name": "CA: CBC Winnipeg",
+      "group": "Canada"
+    },
+    {
+      "id": "cbccalgary.ca",
+      "name": "CA: CBC Calgary",
+      "group": "Canada"
+    },
+    {
+      "id": "lifetimetv.ca",
+      "name": "CA: Lifetime",
+      "group": "Canada"
+    },
+    {
+      "id": "screenpixaction.us",
+      "name": "US: ScreenPix Action",
+      "group": "US Cinema"
+    },
+    {
+      "id": "WNED",
+      "name": "US: PBS",
+      "group": "USA Premium"
+    },
+    {
+      "id": "amc.ca",
+      "name": "CA: AMC",
+      "group": "Canada"
+    },
+    {
+      "id": "bbc2.uk",
+      "name": "UK: BBC 2",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "rds.ca",
+      "name": "CA FR: RDS",
+      "group": "Canada"
+    },
+    {
+      "id": "betjams.us",
+      "name": "US: BET Jams",
+      "group": "USA Premium"
+    },
+    {
+      "id": "retroplex.us",
+      "name": "US: RetroPlex (East)",
+      "group": "US Cinema"
+    },
+    {
+      "id": "showcase.ca",
+      "name": "CA: Showcase",
+      "group": "Canada"
+    },
+    {
+      "id": "aljazeera.uk",
+      "name": "UK: Al Jazeera English",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "starzencorefamily.us",
+      "name": "US: Starz Encore Family",
+      "group": "US Cinema"
+    },
+    {
+      "id": "mtv.us",
+      "name": "CA: MTV",
+      "group": "Canada"
+    },
+    {
+      "id": "cfjpmontreal.ca",
+      "name": "CA FR: Noovo",
+      "group": "Canada"
+    },
+    {
+      "id": "paramountnetwork.us",
+      "name": "CA: Paramount Network",
+      "group": "Canada"
+    },
+    {
+      "id": "hbo.ca",
+      "name": "CA: HBO",
+      "group": "Canada"
+    },
+    {
+      "id": "gametv.ca",
+      "name": "CA: GameTV",
+      "group": "Canada"
+    },
+    {
+      "id": "animalplanet.us",
+      "name": "CA: Animal Planet",
+      "group": "Canada"
+    },
+    {
+      "id": "slice.ca",
+      "name": "CA: SLICE",
+      "group": "Canada"
+    },
+    {
+      "id": "movieplex.us",
+      "name": "US: MoviePlex (East)",
+      "group": "US Cinema"
+    },
+    {
+      "id": "screenpixvoices.us",
+      "name": "US: ScreenPix Voices",
+      "group": "US Cinema"
+    },
+    {
+      "id": "eentertainment.ca",
+      "name": "CA: E! Entertainment",
+      "group": "Canada"
+    },
+    {
+      "id": "tva.ca",
+      "name": "CA FR: Télé Métropole (TVA)",
+      "group": "Canada"
+    },
+    {
+      "id": "discoveryturbo.uk",
+      "name": "UK: Discovery Turbo",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "globalcalgary.ca",
+      "name": "CA: Global Calgary",
+      "group": "Canada"
+    },
+    {
+      "id": "globaledmonton.ca",
+      "name": "CA: Global Edmonton",
+      "group": "Canada"
+    },
+    {
+      "id": "yestv.ca",
+      "name": "CA: YES TV",
+      "group": "Canada"
+    },
+    {
+      "id": "fx.ca",
+      "name": "CA: FX (D)",
+      "group": "Canada"
+    },
+    {
+      "id": "more4.uk",
+      "name": "UK: More4",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "indieplex.us",
+      "name": "US: IndiePlex (East)",
+      "group": "US Cinema"
+    },
+    {
+      "id": "ctvottawa.ca",
+      "name": "CA: CTV Ottawa",
+      "group": "Canada"
+    },
+    {
+      "id": "alibi.uk",
+      "name": "UK: Alibi",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "gold.uk",
+      "name": "UK: Gold",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "outsidetv.us",
+      "name": "US: Outside",
+      "group": "USA Premium"
+    },
+    {
+      "id": "UNIVERSO.us",
+      "name": "US: Universo",
+      "group": "USA Premium"
+    },
+    {
+      "id": "ctvkitchener.ca",
+      "name": "CA: CTV Kitchener",
+      "group": "Canada"
+    },
+    {
+      "id": "tvo.ca",
+      "name": "CA: TVO",
+      "group": "Canada"
+    },
+    {
+      "id": "itv2.uk",
+      "name": "UK: ITV 2",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "skyaction.uk",
+      "name": "UK: Sky Cinema Action",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "itv4.uk",
+      "name": "UK: ITV 4",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "starzkidsfamily.us",
+      "name": "US: Starz Kids & Family",
+      "group": "US Cinema"
+    },
+    {
+      "id": "starz1.ca",
+      "name": "CA: Starz 1",
+      "group": "Canada"
+    },
+    {
+      "id": "documentarychannel.ca",
+      "name": "CA: Documentary Channel",
+      "group": "Canada"
+    },
+    {
+      "id": "crave2.ca",
+      "name": "CA: Crave 2",
+      "group": "Canada"
+    },
+    {
+      "id": "",
+      "name": "CA: CP24 HD",
+      "group": "Canada"
+    },
+    {
+      "id": "casatv.ca",
+      "name": "CA FR: CASA",
+      "group": "Canada"
+    },
+    {
+      "id": "dave.uk",
+      "name": "UK: Dave",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "todaysshoppingchoice.ca",
+      "name": "CA: TSC",
+      "group": "Canada"
+    },
+    {
+      "id": "crave1.ca",
+      "name": "CA: Crave 1",
+      "group": "Canada"
+    },
+    {
+      "id": "ctv2atlanticregion.ca",
+      "name": "CA: CTV 2 Atlantic",
+      "group": "Canada"
+    },
+    {
+      "id": "dejaview.ca",
+      "name": "CA: Deja View",
+      "group": "Canada"
+    },
+    {
+      "id": "turnerclassicmovies.ca",
+      "name": "CA: Turner Classic Movies",
+      "group": "Canada"
+    },
+    {
+      "id": "telequebec.ca",
+      "name": "CA FR: Tele Quebec",
+      "group": "Canada"
+    },
+    {
+      "id": "investigationdiscovery.uk",
+      "name": "UK: Investigation Discovery",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "LFCTV.uk",
+      "name": "UK: Liverpool TV",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "crimeinvestigation.ca",
+      "name": "CA: Crime & Investigation",
+      "group": "Canada"
+    },
+    {
+      "id": "lovenature.ca",
+      "name": "CA: Love Nature 4K",
+      "group": "Canada"
+    },
+    {
+      "id": "natgeowild.ca",
+      "name": "CA: National Geographic Wild",
+      "group": "Canada"
+    },
+    {
+      "id": "channel4.uk",
+      "name": "UK: Channel 4",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "skydrama.uk",
+      "name": "UK: Sky Cinema Drama",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "discoveryscience.uk",
+      "name": "UK: Discovery Science",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "rdsinfo.ca",
+      "name": "CA FR: RDS Info",
+      "group": "Canada"
+    },
+    {
+      "id": "e4.uk",
+      "name": "UK: E4",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "bet.us",
+      "name": "CA: BET",
+      "group": "Canada"
+    },
+    {
+      "id": "crave4.ca",
+      "name": "CA: Crave 4",
+      "group": "Canada"
+    },
+    {
+      "id": "cmt.ca",
+      "name": "CA: CMT",
+      "group": "Canada"
+    },
+    {
+      "id": "skywitness.uk",
+      "name": "UK: Sky Witness",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "skycinemacomedy.uk",
+      "name": "UK: Sky Cinema Comedy",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "skypremiere.uk",
+      "name": "UK: Sky Cinema Premier",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "citytvmontrealqc.ca",
+      "name": "CA: CityTV Montreal (D)",
+      "group": "Canada"
+    },
+    {
+      "id": "cartoonnetwork.ca",
+      "name": "CA: Cartoon Network",
+      "group": "Canada"
+    },
+    {
+      "id": "mtvclassic.uk",
+      "name": "UK: MTV Classic",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "starz2.ca",
+      "name": "CA: Starz 2",
+      "group": "Canada"
+    },
+    {
+      "id": "fxx.ca",
+      "name": "CA: FXX",
+      "group": "Canada"
+    },
+    {
+      "id": "wgncanada.ca",
+      "name": "CA: WGN",
+      "group": "Canada"
+    },
+    {
+      "id": "SkyCinemaSci-fiAndHorror.uk",
+      "name": "UK: Sky Cinema ScFi/Horror",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "rds2.ca",
+      "name": "CA FR: RDS 2",
+      "group": "Canada"
+    },
+    {
+      "id": "skyfamily.uk",
+      "name": "UK: Sky Cinema Family",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "RTE2.ie",
+      "name": "UK: RTE TWO",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "indieplex.us",
+      "name": "US: IndiePlex (West)",
+      "group": "US Cinema"
+    },
+    {
+      "id": "skythriller.uk",
+      "name": "UK: Sky Cinema Thriller",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "ytv.ca",
+      "name": "CA: YTV",
+      "group": "Canada"
+    },
+    {
+      "id": "MUTV.uk",
+      "name": "UK: MUTV",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "discoverychannel.uk",
+      "name": "UK: Discovery",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "historychannel.uk",
+      "name": "UK: History",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "CJON-NTV.ca",
+      "name": "CA: NTV",
+      "group": "Canada"
+    },
+    {
+      "id": "hbo2.ca",
+      "name": "CA: HBO 2",
+      "group": "Canada"
+    },
+    {
+      "id": "skyhits.uk",
+      "name": "UK: Sky Cinema Hits",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "aptn.ca",
+      "name": "CA: APTN",
+      "group": "Canada"
+    },
+    {
+      "id": "film4.uk",
+      "name": "UK: Film 4",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "superecran4.ca",
+      "name": "CA FR: Super Ecran 4",
+      "group": "Canada"
+    },
+    {
+      "id": "itvbe.uk",
+      "name": "UK: ITVBe",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "WWOR",
+      "name": "US: MyTV (New Jersey)",
+      "group": "USA Premium"
+    },
+    {
+      "id": "skyselect.uk",
+      "name": "UK: Sky Cinema Select",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "cbcottawa.ca",
+      "name": "CA: CBC Ottawa",
+      "group": "Canada"
+    },
+    {
+      "id": "skyarts.uk",
+      "name": "UK: Sky Arts",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "cbchalifax.ca",
+      "name": "CA: CBC Halifax",
+      "group": "Canada"
+    },
+    {
+      "id": "discoveryhistory.uk",
+      "name": "UK: Discovery History",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "makeful.ca",
+      "name": "CA: MakeFul",
+      "group": "Canada"
+    },
+    {
+      "id": "cbcmontreal.ca",
+      "name": "CA FR: CBC Montreal",
+      "group": "Canada"
+    },
+    {
+      "id": "skyatlantic.uk",
+      "name": "UK: Sky Atlantic",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "cbcmontreal.ca",
+      "name": "CA: CBC Montreal",
+      "group": "Canada"
+    },
+    {
+      "id": "DisneyJunior.ca",
+      "name": "CA: Disney Junior",
+      "group": "Canada"
+    },
+    {
+      "id": "bbc4.uk",
+      "name": "UK: BBC 4",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "greattv.uk",
+      "name": "UK: Great! tv",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "ctv2vancouver.ca",
+      "name": "CA: CTV 2 Vancouver",
+      "group": "Canada"
+    },
+    {
+      "id": "prise2.ca",
+      "name": "CA FR: PRISE 2",
+      "group": "Canada"
+    },
+    {
+      "id": "NATGHDG",
+      "name": "UK: National Geographic",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "ICIARTVCanada.ca",
+      "name": "CA FR: Ici ARTV",
+      "group": "Canada"
+    },
+    {
+      "id": "cartoonnetwork.uk",
+      "name": "UK: Cartoon Network",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "channel5.uk",
+      "name": "UK: Channel 5",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "itv3.uk",
+      "name": "UK: ITV 3",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "tlc.uk",
+      "name": "UK: TLC",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "skycrime.uk",
+      "name": "UK: Sky Crime",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "animalplanet.uk",
+      "name": "UK: Animal Planet",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "natgeowild.uk",
+      "name": "UK: National Geographic Wild",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "drama.uk",
+      "name": "UK: CBS Drama",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "cbcedmonton.ca",
+      "name": "CA: CBC Edmonton",
+      "group": "Canada"
+    },
+    {
+      "id": "bbcfirst.ca",
+      "name": "CA: BBC First",
+      "group": "Canada"
+    },
+    {
+      "id": "boomerang.uk",
+      "name": "UK: Boomerang",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "mtv.uk",
+      "name": "UK: MTV",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "foodnetwork.uk",
+      "name": "UK: Food Network",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "SkyOne.de",
+      "name": "UK: Sky One",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "omni1.ca",
+      "name": "CA: OMNI East (D)",
+      "group": "Canada"
+    },
+    {
+      "id": "superecran2.ca",
+      "name": "CA FR: Super Ecran 2",
+      "group": "Canada"
+    },
+    {
+      "id": "nickelodeon.uk",
+      "name": "UK: Nickelodeon",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "RTEOne.ie",
+      "name": "UK: RTE ONE",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "nickjunior.uk",
+      "name": "UK: Nick JR",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "mtvbase.uk",
+      "name": "UK: MTV Base",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "teletoonfrench.ca",
+      "name": "CA FR: Télétoon",
+      "group": "Canada"
+    },
+    {
+      "id": "cbcwindsor.ca",
+      "name": "CA: CBC Windsor",
+      "group": "Canada"
+    },
+    {
+      "id": "superecran.ca",
+      "name": "CA FR: Super Ecran 1",
+      "group": "Canada"
+    },
+    {
+      "id": "superecran3.ca",
+      "name": "CA FR: Super Ecran 3",
+      "group": "Canada"
+    },
+    {
+      "id": "beINSports.ca",
+      "name": "CA FR: Bein Sports",
+      "group": "Canada"
+    },
+    {
+      "id": "cbccharlottetown.ca",
+      "name": "CA: CBC Charlottetown",
+      "group": "Canada"
+    },
+    {
+      "id": "film4plus1.uk",
+      "name": "UK: Film4 +1",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "4707",
+      "name": "US: Aspire",
+      "group": "USA Premium"
+    },
+    {
+      "id": "",
+      "name": "US: OXYGEN TRUE CRIME",
+      "group": "US Documentaries"
+    },
+    {
+      "id": "srf1",
+      "name": "UK: ITV HD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "",
+      "name": "CINEBOX: ACTION",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: HBO EAST",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: INVESTIGATION DISCOVERY WEST HD",
+      "group": "US Documentaries"
+    },
+    {
+      "id": "bbcone",
+      "name": "UK: BBC ONE SD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "",
+      "name": "US: DISCOVERY CHANNEL WEST  HD",
+      "group": "US Documentaries"
+    },
+    {
+      "id": "",
+      "name": "US: DISNEY JR EAST HD",
+      "group": "US Kids"
+    },
+    {
+      "id": "",
+      "name": "CINEBOX: WAR",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: TRAVEL CHANNEL HD",
+      "group": "US Documentaries"
+    },
+    {
+      "id": "bbcone",
+      "name": "UK: BBC ONE FHD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "",
+      "name": "US: NICKTOONS HD",
+      "group": "US Kids"
+    },
+    {
+      "id": "skynews",
+      "name": "UK: SKY NEWS FHD",
+      "group": "UK News"
+    },
+    {
+      "id": "",
+      "name": "US: CINEMAX WEST",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: INVESTIGATION DISCOVERY EAST HD",
+      "group": "US Documentaries"
+    },
+    {
+      "id": "",
+      "name": "US: NATIONAL GEOGRAPHIC HD",
+      "group": "US Documentaries"
+    },
+    {
+      "id": "",
+      "name": "UK: FOX NEWS HD",
+      "group": "UK News"
+    },
+    {
+      "id": "bbcone",
+      "name": "UK: BBC ONE HD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "",
+      "name": "US: STARZ EAST",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: DISCOVERY CHANNEL EAST HD",
+      "group": "US Documentaries"
+    },
+    {
+      "id": "",
+      "name": "US: CARTOON NETWORK EAST HD",
+      "group": "US Kids"
+    },
+    {
+      "id": "",
+      "name": "US: SHOWTIME 2",
+      "group": "US Cinema"
+    },
+    {
+      "id": "srf1",
+      "name": "UK: ITV SD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "",
+      "name": "US: SHOWTIME WEST",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: PURSUIT CHANNEL FHD",
+      "group": "US Documentaries"
+    },
+    {
+      "id": "",
+      "name": "US: HISTORY EAST HD",
+      "group": "US Documentaries"
+    },
+    {
+      "id": "",
+      "name": "US: DISNEY JR WEST HD",
+      "group": "US Kids"
+    },
+    {
+      "id": "",
+      "name": "US: BOOMERANG HD",
+      "group": "US Kids"
+    },
+    {
+      "id": "",
+      "name": "US: HBO ZONE",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: SHOWTIME EXTREME",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: TEENNICK HD",
+      "group": "US Kids"
+    },
+    {
+      "id": "",
+      "name": "CA: CTV SCI FI HD",
+      "group": "Canada"
+    },
+    {
+      "id": "EpixEast.us",
+      "name": "US: EPIX",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: A&E FHD",
+      "group": "US Documentaries"
+    },
+    {
+      "id": "GBNews.uk",
+      "name": "UK: GB NEWS FHD",
+      "group": "UK News"
+    },
+    {
+      "id": "",
+      "name": "US: SHOWTIME EAST",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: HBO SIGNATURE",
+      "group": "US Cinema"
+    },
+    {
+      "id": "BBCNews.uk",
+      "name": "UK: BBC NEWS HD",
+      "group": "UK News"
+    },
+    {
+      "id": "",
+      "name": "US: PBS KIDS HD",
+      "group": "US Kids"
+    },
+    {
+      "id": "",
+      "name": "US: DISNEY XD EAST HD",
+      "group": "US Kids"
+    },
+    {
+      "id": "AlJazeeraEnglish.qa",
+      "name": "UK: AL JAZEERA FHD",
+      "group": "UK News"
+    },
+    {
+      "id": "",
+      "name": "US: HBO WEST",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: STARZENCORE ACTION",
+      "group": "US Cinema"
+    },
+    {
+      "id": "bbctwo",
+      "name": "UK: BBC TWO FHD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "RTE2.ie",
+      "name": "IRE: RTE TWO FHD",
+      "group": "Irish TV"
+    },
+    {
+      "id": "",
+      "name": "US: HBO 2",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: MOTORTREND WEST",
+      "group": "US Documentaries"
+    },
+    {
+      "id": "",
+      "name": "US: 5 STARMAX",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: HBO FAMILY",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: NICK JR. EAST FHD",
+      "group": "US Kids"
+    },
+    {
+      "id": "",
+      "name": "CA: HGTV HD",
+      "group": "Canada"
+    },
+    {
+      "id": "RDI",
+      "name": "CA: ICI RDI",
+      "group": "Canada"
+    },
+    {
+      "id": "",
+      "name": "US: NAT GEO WILD HD",
+      "group": "US Documentaries"
+    },
+    {
+      "id": "FoodNetworkUK.uk",
+      "name": "UK: FOOD NETWORK HD",
+      "group": "Discovery Plus"
+    },
+    {
+      "id": "",
+      "name": "US: SHOWTIME SHOWCASE",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: A&E",
+      "group": "US Documentaries"
+    },
+    {
+      "id": "",
+      "name": "US: CINEMAX EAST",
+      "group": "US Cinema"
+    },
+    {
+      "id": "CIII",
+      "name": "CA: GLOBAL TORONTO HD",
+      "group": "Canada"
+    },
+    {
+      "id": "",
+      "name": "US: TCM WEST",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: DISNEY CHANNEL EAST HD",
+      "group": "US Kids"
+    },
+    {
+      "id": "Channel4.uk",
+      "name": "UK: CHANNEL 4 HD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "",
+      "name": "US: STARZ IN BLACK WEST",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "CA: FOOD NETWORK HD",
+      "group": "Canada"
+    },
+    {
+      "id": "",
+      "name": "CA: CTV NEWS",
+      "group": "Canada"
+    },
+    {
+      "id": "BBCNews.uk",
+      "name": "UK: BBC NEWS FHD",
+      "group": "UK News"
+    },
+    {
+      "id": "",
+      "name": "US: STARZ COMEDY",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: HBO COMEDY",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: STARZ IN BLACK",
+      "group": "US Cinema"
+    },
+    {
+      "id": "my24wvtv.us",
+      "name": "US: MY 24 Milwaukee (WVTV)",
+      "group": "USA Premium"
+    },
+    {
+      "id": "",
+      "name": "US: SHOWTIME NEXT",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: ACTIONMAX",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: DISNEY XD WEST HD",
+      "group": "US Kids"
+    },
+    {
+      "id": "",
+      "name": "CA: CBC TORONTO HD",
+      "group": "Canada"
+    },
+    {
+      "id": "my50wpwr.us",
+      "name": "US: MY 50 Chicago (WPWR)",
+      "group": "USA Premium"
+    },
+    {
+      "id": "",
+      "name": "US: NICKELODEON WEST FHD",
+      "group": "US Kids"
+    },
+    {
+      "id": "",
+      "name": "US: EPIX DRIVE IN",
+      "group": "US Cinema"
+    },
+    {
+      "id": "SmithsonianChannelEast.us",
+      "name": "US: SMITHSONIAN WEST FHD",
+      "group": "US Documentaries"
+    },
+    {
+      "id": "srf1",
+      "name": "UK: ITV FHD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "",
+      "name": "CA: GAME SHOW NETWORK HD",
+      "group": "Canada"
+    },
+    {
+      "id": "AlJazeeraEnglish.qa",
+      "name": "UK: AL JAZEERA HD",
+      "group": "UK News"
+    },
+    {
+      "id": "CNN.ba",
+      "name": "UK: CNN FHD",
+      "group": "UK News"
+    },
+    {
+      "id": "SYFY.HD.uk",
+      "name": "UK: SYFY FHD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "",
+      "name": "CA: CTV COMEDY EAST HD",
+      "group": "Canada"
+    },
+    {
+      "id": "",
+      "name": "US: BABY FIRST HD",
+      "group": "US Kids"
+    },
+    {
+      "id": "",
+      "name": "US: HBO COMEDY WEST",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: MOREMAX",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: HBO SIGNATURE WEST",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: NICK JR WEST FHD",
+      "group": "US Kids"
+    },
+    {
+      "id": "itv2",
+      "name": "UK: ITV2 FHD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "",
+      "name": "US: STARZ ENCORE SUSPENSE",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: NICKELODEON EAST FHD",
+      "group": "US Kids"
+    },
+    {
+      "id": "",
+      "name": "US: STARZENCORE CLASSIC",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: SONY MOVIES",
+      "group": "US Cinema"
+    },
+    {
+      "id": "ClublandTV.uk",
+      "name": "UK: CLUBLAND TV SD",
+      "group": "UK Music"
+    },
+    {
+      "id": "",
+      "name": "US: AMERICAN HEROES CHANNEL FHD",
+      "group": "US Documentaries"
+    },
+    {
+      "id": "",
+      "name": "US: STARZ EDGE",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: HBO 2 WEST",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: DISNEY CHANNEL WEST HD",
+      "group": "US Kids"
+    },
+    {
+      "id": "QUEST",
+      "name": "UK: QUEST HD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "",
+      "name": "US: INDIEPLEX WEST",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "DOCUBOX: HISTORY",
+      "group": "US Documentaries"
+    },
+    {
+      "id": "",
+      "name": "US: SHOWTIME FAMILY ZONE WEST",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: ANIMAL PLANET EAST HD",
+      "group": "US Documentaries"
+    },
+    {
+      "id": "bbctwo",
+      "name": "UK: BBC TWO HD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "film4",
+      "name": "UK: FILM4 HD",
+      "group": "UK Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: STARZ CINEMA",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: SMITHSONIAN EAST HD",
+      "group": "US Documentaries"
+    },
+    {
+      "id": "Now80s.uk",
+      "name": "UK: NOW 80S SD",
+      "group": "UK Music"
+    },
+    {
+      "id": "",
+      "name": "US: STARZ COMEDY WEST",
+      "group": "US Cinema"
+    },
+    {
+      "id": "MNT.(WBFF2).Baltimore,.MD.us",
+      "name": "US: MY 24 Baltimore (WBFF)",
+      "group": "USA Premium"
+    },
+    {
+      "id": "5StarPlus1.uk",
+      "name": "UK: 5STAR +1 SD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "e4",
+      "name": "UK: E4 FHD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "",
+      "name": "CA: CBC NEWS HD",
+      "group": "Canada"
+    },
+    {
+      "id": "ScreenPixVoices.us",
+      "name": "US: SCREENPIX VOICES US",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: EPIX HITS",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "UK: DISCOVERY SCIENCE",
+      "group": "Discovery Plus"
+    },
+    {
+      "id": "",
+      "name": "US: SHOWTIME 2 WEST",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: MORE MAX WEST",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: SCREENPIX WESTERNS US",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: STARZ WEST",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: DISCOVERY LIFE HD",
+      "group": "US Documentaries"
+    },
+    {
+      "id": "",
+      "name": "US: SHOWTIME WOMEN",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: HBO ZONE WEST",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: ACTIONMAX WEST",
+      "group": "US Cinema"
+    },
+    {
+      "id": "itv4",
+      "name": "UK: ITV4 FHD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "Channel5.uk",
+      "name": "UK: CHANNEL 5 HD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "itv3",
+      "name": "UK: ITV3 FHD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "BBCOneSouthWest.uk",
+      "name": "UK: BBC ONE S WEST SD",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "",
+      "name": "CA: DISCOVERY VELOCITY HD",
+      "group": "Canada"
+    },
+    {
+      "id": "",
+      "name": "US: STARZ ENCORE CLASSIC WEST",
+      "group": "US Cinema"
+    },
+    {
+      "id": "HGTVUK.uk",
+      "name": "UK: HGTV SD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "MNT.(KVCW-DT2).Las.Vegas,.NV.us",
+      "name": "US: MY Las Vegas (KVCW)",
+      "group": "USA Premium"
+    },
+    {
+      "id": "GoldRadio.uk",
+      "name": "UK: GOLD FHD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "More4.uk",
+      "name": "UK: MORE4 FHD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "",
+      "name": "US: STARZENCORE WESTERNS",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: SHOWTIME BET WEST",
+      "group": "US Cinema"
+    },
+    {
+      "id": "ITV1Plus1London.uk",
+      "name": "UK: ITV +1 SD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "my62ksmo.us",
+      "name": "US: MY 62 Kansas City (KSMO)",
+      "group": "USA Premium"
+    },
+    {
+      "id": "",
+      "name": "US: STARZ EDGE WEST",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "CA: FXX HD",
+      "group": "Canada"
+    },
+    {
+      "id": "",
+      "name": "US: ANIMAL PLANET WEST FHD",
+      "group": "US Documentaries"
+    },
+    {
+      "id": "GoldRadio.uk",
+      "name": "UK: GOLD HD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "",
+      "name": "US: STARZ CINEMA WEST",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: SCIENCE HD",
+      "group": "US Documentaries"
+    },
+    {
+      "id": "",
+      "name": "US: DESTINATION AMERICA HD",
+      "group": "US Documentaries"
+    },
+    {
+      "id": "itv4",
+      "name": "UK: ITV4 HD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "",
+      "name": "US: SHOWTIME WOMEN WEST",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: SHOWTIME FAMILY ZONE",
+      "group": "US Cinema"
+    },
+    {
+      "id": "CBOT",
+      "name": "CA: CBC OTTAWA",
+      "group": "Canada"
+    },
+    {
+      "id": "bbctwo",
+      "name": "UK: BBC TWO SD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "",
+      "name": "CA: CITY TV CALGARY HD",
+      "group": "Canada"
+    },
+    {
+      "id": "DTURBO",
+      "name": "UK: DISCOVERY TURBO SD",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "",
+      "name": "CA: CITY TV TORONTO HD",
+      "group": "Canada"
+    },
+    {
+      "id": "",
+      "name": "US: STARZ ENCORE WESTERN WEST",
+      "group": "US Cinema"
+    },
+    {
+      "id": "NationalGeographicCanada.ca",
+      "name": "CA: NATIONAL GEOGRAPHIC HD",
+      "group": "Canada"
+    },
+    {
+      "id": "",
+      "name": "UK: COMEDY CENTRAL HD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "MNT.(WRDC).Raleigh,.NC.us",
+      "name": "US: MY 28 Raleigh (WRDC)",
+      "group": "USA Premium"
+    },
+    {
+      "id": "",
+      "name": "US: OUTDOOR CHANNEL HD",
+      "group": "US Documentaries"
+    },
+    {
+      "id": "Channel4.uk",
+      "name": "UK: CHANNEL 4 SD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "",
+      "name": "UK: DISCOVERY HISTORY",
+      "group": "Discovery Plus"
+    },
+    {
+      "id": "",
+      "name": "US: STARZ ENCORE ACTION WEST",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "UK: ALIBI FHD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "AMCEast.us",
+      "name": "CA: AMC HD",
+      "group": "Canada"
+    },
+    {
+      "id": "",
+      "name": "CA: CITY TV MONTREAL HD",
+      "group": "Canada"
+    },
+    {
+      "id": "BBCFourHD.uk",
+      "name": "UK: BBC FOUR FHD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "FoodNetworkUK.uk",
+      "name": "UK: FOOD NETWORK SD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "e4",
+      "name": "UK: E4 HD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "",
+      "name": "US: DISCOVERY FAMILY",
+      "group": "US Documentaries"
+    },
+    {
+      "id": "",
+      "name": "US: STARZ ENCORE SUSPENSE WEST",
+      "group": "US Cinema"
+    },
+    {
+      "id": "",
+      "name": "US: BABY TV",
+      "group": "US Kids"
+    },
+    {
+      "id": "CBCPJ",
+      "name": "CA: CBC HALIFAX HD",
+      "group": "Canada"
+    },
+    {
+      "id": "Channel5.uk",
+      "name": "UK: CHANNEL 5 SD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "",
+      "name": "US: TRAVEL CHANNEL WEST HD",
+      "group": "US Documentaries"
+    },
+    {
+      "id": "BBCThreeHD.uk",
+      "name": "UK: BBC THREE HD",
+      "group": "UK Entertainment"
+    },
+    {
+      "id": "PopPlus1.uk",
+      "name": "UK: POP +1 SD",
+      "group": "UK Kids"
+    },
+    {
+      "id": "",
+      "name": "CA: DISCOVERY SCIENCE HD",
+      "group": "Canada"
+    },
+    {
+      "id": "Channel.4.uk",
+      "name": "UK: CHANNEL 4 NORTH SD",
+      "group": "United Kingdom"
+    },
+    {
+      "id": "",
+      "name": "US: THRILLERMAX",
+      "group": "US Cinema"
+    },
+    {
+      "id": "my12kmyu.us",
+      "name": "US: MY 12 Salt Lake City (KMYU)",
+      "group": "USA Premium"
+    },
+    {
+      "id": "",
+      "name": "CA: GLOBAL VANCOUVER HD",
+      "group": "Canada"
+    },
+    {
+      "id": "itv3",
+      "name": "UK: ITV3 SD",
+      "group": "UK Entertainment"
+    }
+  ]
+}
