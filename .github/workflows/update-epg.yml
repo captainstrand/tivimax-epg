@@ -128,6 +128,14 @@ jobs:
                   if len(hits)==1:resolved=next(iter(hits))
               if resolved and pid not in used and pid not in existing:alias[pid]=resolved;provider_hits+=1
           playlist=json.load(open('provider_channels.json',encoding='utf-8')) if os.path.exists('provider_channels.json') else []
+          # Prefer provider IDs when they are recognizable canonical IDs. This avoids needless fuzzy matching.
+          for row in playlist:
+              pid=(row.get('id') or '').strip()
+              if not pid or pid in used or pid in existing or pid in alias:continue
+              cc=country(pid); key=pid.lower()
+              # canonical ID may differ only by case from source XMLTV ID
+              hits=lower.get(key,[])
+              if len(hits)==1 and (not cc or country(hits[0])==cc):alias[pid]=hits[0]
           covered=pexact=pfuzzy=pambig=punmatched=0
           for i,row in enumerate(playlist,1):
               pid=(row.get('id') or '').strip(); pname=(row.get('name') or '').strip()
@@ -150,151 +158,6 @@ jobs:
                       if n:resolved.update(exact.get((cc,n),set()))
               if len(resolved)==1:alias[pid]=next(iter(resolved));pexact+=1;continue
               if len(resolved)>1:pambig+=1;continue
-              # Fast candidate retrieval: only compare channels sharing multiple trigrams.
-              votes={}
-              for g in grams(pn):
-                  for h in trigram.get((cc,g),set()) if cc else ():
-                      votes[h]=votes.get(h,0)+1
-              min_votes=max(2,int(len(grams(pn))*0.35))
-              candidates=[h for h,v in votes.items() if v>=min_votes]
-              scored=[]
-              for h in candidates:
-                  best=max((difflib.SequenceMatcher(None,pn,s).ratio() for s in snorm[h]),default=0)
-                  if best>=0.90:scored.append((best,h))
-              scored.sort(reverse=True)
-              if scored and scored[0][0]>=0.94 and (len(scored)==1 or scored[0][0]-scored[1][0]>=0.06):alias[pid]=scored[0][1];pfuzzy+=1
-              elif scored:pambig+=1
-              else:punmatched+=1
-              if i%2000==0:print('Playlist progress',i,'/',len(playlist),flush=True)
-          print(f'Case aliases: {case_hits:,}; canonical: {canonical_hits:,}; guide/feed: {guide_hits+feed_hits:,}; provider: {provider_hits:,}',flush=True)
-          print(f'Playlist channels: {len(playlist):,}; already covered: {covered:,}; exact-name added: {pexact:,}; indexed fuzzy added: {pfuzzy:,}; ambiguous held back: {pambig:,}; unmatched: {punmatched:,}',flush=True)
-          print(f'Total aliases: {len(alias):,}',flush=True)
-          wanted=set(); out_alias={}
-          for row in playlist:
-              pid=(row.get('id') or '').strip()
-              if not pid:continue
-              src=pid if pid in used else alias.get(pid)
-              if src in used:
-                  wanted.add(src)
-                  if pid!=src:out_alias[pid]=src
-          with open('guide.xml','w',encoding='utf-8') as f:
-              f.write('<?xml version="1.0" encoding="UTF-8"?>\n<tv generator-info-name="CaptainStrand TiviMax Playlist EPG">\n')
-              for cid in sorted(wanted):
-                  if cid in channels:f.write(channels[cid]+'\n')
-              for a,src in sorted(out_alias.items()):
-                  if src in channels:
-                      e=ET.fromstring(channels[src]);e.set('id',a);f.write(ET.tostring(e,encoding='unicode')+'\n')
-              bysrc={}
-              for a,s in out_alias.items():bysrc.setdefault(s,[]).append(a)
-              for k in sorted((k for k in programmes if k[0] in wanted),key=lambda x:(x[1],x[0] or '')):
-                  f.write(programmes[k]+'\n')
-                  for a in bysrc.get(k[0],[]):
-                      e=ET.fromstring(programmes[k]);e.set('channel',a);f.write(ET.tostring(e,encoding='unicode')+'\n')
-              f.write('</tv>\n')
-          print(f'TiviMax output source channels: {len(wanted):,}; playlist aliases: {len(out_alias):,}',flush=True)
-          print(f'Sources: {len(inputs)}; active channels: {len(used):,}; programmes: {len(programmes):,}; aliases: {len(alias):,}',flush=True)
-          PY
-          gzip -9 -c guide.xml > guide.xml.gz
-          gzip -t guide.xml.gz
-          ls -lh guide.xml.gz
-          rm -f guide.xml epgpw.xml epgpw.xml.gz epgshare.xml epgshare.xml.gz channels.json feeds.json guides.json
-      - name: Commit refreshed guide
-        shell: bash
-        run: |
-          set -euo pipefail
-          size=$(stat -c%s guide.xml.gz)
-          if [ "$size" -ge 100000000 ]; then echo "guide.xml.gz too large: $size bytes"; exit 1; fi
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add guide.xml.gz
-          if git diff --cached --quiet; then echo 'Guide unchanged.'; else git commit -m 'Refresh TiviMax playlist-only XMLTV guide'; git push; fi
-,' ',s)
-              s=re.sub(r'\b(?:backup|alt|feed)\b',' ',s)
-              s=re.sub(r'\b(hdtv|hd|fhd|uhd|4k|1080p|720p|channel|network|tv)\b',' ',s)
-              return re.sub(r'[^a-z0-9]+','',s)
-          def country(cid):
-              base=(cid or '').split('@',1)[0]; m=re.search(r'\.([A-Za-z]{2})(?:\d+)?$',base)
-              return m.group(1).upper() if m else None
-          def grams(s):
-              if len(s)<3:return {s} if s else set()
-              return {s[i:i+3] for i in range(len(s)-2)}
-          for fn in inputs:
-              print('Reading',fn,flush=True)
-              for _,e in ET.iterparse(fn,events=('end',)):
-                  tag=e.tag.rsplit('}',1)[-1]
-                  if tag=='channel':
-                      cid=e.get('id')
-                      if cid and cid not in channels:
-                          channels[cid]=ET.tostring(e,encoding='unicode'); names[cid]=[x.text or '' for x in e.findall('./display-name')]
-                  elif tag=='programme':
-                      cid=e.get('channel'); start=e.get('start',''); stop=e.get('stop',''); when=dt(start)
-                      if cid and when and low<=when<=high:
-                          k=(cid,start,stop)
-                          if k not in programmes: programmes[k]=ET.tostring(e,encoding='unicode'); used.add(cid)
-                  e.clear()
-          canon=json.load(open('channels.json',encoding='utf-8')); feeds=json.load(open('feeds.json',encoding='utf-8')); guides=json.load(open('guides.json',encoding='utf-8'))
-          canon_by_id={c.get('id'):c for c in canon if c.get('id')}; canonical_country={cid:(c.get('country') or '').upper() or country(cid) for cid,c in canon_by_id.items()}
-          existing=set(channels); alias={}; lower={}; exact={}; snorm={}; trigram={}
-          for cid in used:
-              lower.setdefault(cid.lower(),[]).append(cid); vals=[cid]+names.get(cid,[]); snorm[cid]=set(filter(None,(norm(v) for v in vals)))
-              cc=country(cid)
-              for n in snorm[cid]:
-                  exact.setdefault((cc,n),set()).add(cid)
-                  for g in grams(n):trigram.setdefault((cc,g),set()).add(cid)
-          def add(a,t):
-              if not a or a in used or a in existing or a in alias:return False
-              hits=[t] if t in used else lower.get((t or '').lower(),[])
-              if len(hits)==1:alias[a]=hits[0];return True
-              return False
-          case_hits=0
-          for cid in used:
-              a=cid.lower()
-              if a!=cid and a not in existing and a not in alias:alias[a]=cid;case_hits+=1
-          canonical_hits=sum(1 for c in canon if c.get('id') and add(c['id'],c['id']))
-          guide_hits=0; seen=set()
-          for g in guides:
-              base=g.get('channel'); feed=g.get('feed')
-              if not base:continue
-              for gid in [base]+([base+'@'+feed] if feed else []):
-                  if gid in seen:continue
-                  seen.add(gid)
-                  for t in (gid,base):
-                      if add(gid,t):guide_hits+=1;break
-          feed_hits=0
-          for f in feeds:
-              base=f.get('channel'); fid=f.get('id')
-              if base and fid:
-                  gid=base+'@'+fid
-                  for t in (gid,base):
-                      if add(gid,t):feed_hits+=1;break
-          provider=json.load(open('provider_aliases.json',encoding='utf-8')) if os.path.exists('provider_aliases.json') else {}
-          provider_hits=0
-          for pid,target in provider.items():
-              expected=canonical_country.get(target) or country(target) or country(pid); resolved=None
-              candidates=[]
-              if target in used:candidates=[target]
-              elif len(lower.get(target.lower(),[]))==1:candidates=lower[target.lower()]
-              elif target in alias:candidates=[alias[target]]
-              for h in candidates:
-                  if not expected or country(h)==expected:resolved=h;break
-              if not resolved:
-                  c=canon_by_id.get(target,{}); hits=set()
-                  for v in [target,c.get('name','')]+(c.get('alt_names') or []):
-                      n=norm(v)
-                      if n:hits.update(exact.get((expected,n),set()) if expected else set().union(*(exact.get((cc,n),set()) for cc in {country(x) for x in used})))
-                  if len(hits)==1:resolved=next(iter(hits))
-              if resolved and pid not in used and pid not in existing:alias[pid]=resolved;provider_hits+=1
-          playlist=json.load(open('provider_channels.json',encoding='utf-8')) if os.path.exists('provider_channels.json') else []
-          covered=pexact=pfuzzy=pambig=punmatched=0
-          for i,row in enumerate(playlist,1):
-              pid=(row.get('id') or '').strip(); pname=(row.get('name') or '').strip()
-              if not pid:continue
-              if pid in used or pid in existing or pid in alias:covered+=1;continue
-              cc=country(pid); pn=norm(pname)
-              if not pn:punmatched+=1;continue
-              hits=exact.get((cc,pn),set()) if cc else set()
-              if len(hits)==1:alias[pid]=next(iter(hits));pexact+=1;continue
-              if len(hits)>1:pambig+=1;continue
               # Fast candidate retrieval: only compare channels sharing multiple trigrams.
               votes={}
               for g in grams(pn):
