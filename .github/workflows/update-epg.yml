@@ -1,6 +1,7 @@
 name: Build TiviMax EPG
+run-name: TiviMax EPG build
 
-on:
+'on':
   workflow_dispatch:
   schedule:
     - cron: '17 */6 * * *'
