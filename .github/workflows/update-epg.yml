@@ -31,6 +31,25 @@ jobs:
             gzip -t epgshare.xml.gz
             gunzip -c epgshare.xml.gz > epgshare.xml
           fi
+          # Add country-focused sources. These dramatically improve canonical tvg-id
+          # coverage while the final output remains playlist-only.
+          for cc in us gb ca ie au nz; do
+            if curl --fail --location --retry 3 -o "country-$cc.xml.gz" "https://iptv-epg.org/files/epg-$cc.xml.gz"; then
+              gzip -t "country-$cc.xml.gz" && gunzip -c "country-$cc.xml.gz" > "country-$cc.xml"
+            else
+              rm -f "country-$cc.xml.gz"
+            fi
+          done
+          # IPTV-org's strongest US/UK guide bundles.
+          for spec in \
+            "org-us-tvtv|https://iptv-org.github.io/epg/guides/us/tvtv.us.epg.xml" \
+            "org-us-directv|https://iptv-org.github.io/epg/guides/us/directv.com.epg.xml" \
+            "org-us-tvguide|https://iptv-org.github.io/epg/guides/us/tvguide.com.epg.xml" \
+            "org-uk-ontv|https://iptv-org.github.io/epg/guides/uk/ontvtonight.com.epg.xml"
+          do
+            n="${spec%%|*}"; u="${spec#*|}"
+            curl --fail --location --retry 3 -o "$n.xml" "$u" || rm -f "$n.xml"
+          done
 
       - name: Build playlist-specific XMLTV
         shell: bash
@@ -89,7 +108,7 @@ jobs:
           except Exception: pass
           alias_ci={str(k).lower():str(v) for k,v in aliases.items()}
 
-          sources=[x for x in ('epgpw.xml','epgshare.xml') if os.path.exists(x)]
+          sources=[x for x in os.listdir('.') if x.endswith('.xml') and (x.startswith('epgpw') or x.startswith('epgshare') or x.startswith('country-') or x.startswith('org-'))]
           src={}
           by_id_ci={}
           name_index=defaultdict(set)
@@ -111,10 +130,20 @@ jobs:
 
           def choose(p):
               pid=p['id']; nm=p['name']; c=country(pid,nm)
-              # Strongest: exact/case-insensitive XMLTV id.
+              # Strongest: exact/case-insensitive XMLTV id, then safe canonical
+              # variants used by common providers.
               if pid:
                   if pid in src: return pid,'id-exact'
                   if pid.lower() in by_id_ci: return by_id_ci[pid.lower()],'id-case'
+                  variants=[pid]
+                  # Provider ids often use lowercase canonical IDs while guide
+                  # sources use CamelCase. The case-insensitive index handles
+                  # that. Also try harmless legacy suffix forms.
+                  for suffix in ('.uk','.gb'):
+                      if pid.lower().endswith(suffix):
+                          variants.append(pid[:-len(suffix)]+('.gb' if suffix=='.uk' else '.uk'))
+                  for v in variants:
+                      if v.lower() in by_id_ci: return by_id_ci[v.lower()],'id-variant'
                   a=alias_ci.get(pid.lower())
                   if a:
                       if a in src:return a,'manual-alias'
@@ -122,6 +151,121 @@ jobs:
               z=norm(nm)
               if not z:return None,'unmatched'
               candidates=list(name_index.get(z,()))
+              # A second exact-name pass removes common network words only when
+              # the first pass found nothing, avoiding accidental affiliate matches.
+              if not candidates:
+                  z2=re.sub(r'(channel|network|television|tv)
+              if candidates:
+                  same=[x for x in candidates if not c or country(x,'')==c]
+                  q=same or candidates
+                  if len(q)==1:return q[0],'name-exact'
+              # Conservative fuzzy match, country-aware where possible.
+              pool=[]
+              for key,ids in name_index.items():
+                  if abs(len(key)-len(z))>max(5,len(z)//3):continue
+                  ratio=difflib.SequenceMatcher(None,z,key).ratio()
+                  if ratio<0.92:continue
+                  for sid in ids:
+                      if c and country(sid,'') not in ('',c):continue
+                      pool.append((ratio,sid))
+              pool.sort(reverse=True)
+              if pool and (len(pool)==1 or pool[0][0]-pool[1][0]>=0.04):
+                  return pool[0][1],'name-fuzzy'
+              return None,'ambiguous' if pool else 'unmatched'
+
+          matches=[]; counts=defaultdict(int)
+          for p in playlist:
+              sid,why=choose(p); counts[why]+=1
+              if sid: matches.append((p,sid,why))
+
+          wanted={sid for _,sid,_ in matches}
+          programmes=defaultdict(list)
+          now=datetime.now(timezone.utc); lo=now-timedelta(hours=12); hi=now+timedelta(days=7)
+          def dt(s):
+              m=re.match(r'(\d{14})\s*([+-]\d{4})?',s or '')
+              if not m:return None
+              d=datetime.strptime(m.group(1),'%Y%m%d%H%M%S')
+              if not m.group(2):return d.replace(tzinfo=timezone.utc)
+              z=m.group(2); sign=1 if z[0]=='+' else -1
+              off=timedelta(hours=int(z[1:3]),minutes=int(z[3:5]))*sign
+              return d.replace(tzinfo=timezone(off)).astimezone(timezone.utc)
+
+          # Second pass: retain programmes only for matched source IDs.
+          for path in sources:
+              for ev,e in ET.iterparse(path,events=('end',)):
+                  if e.tag!='programme':
+                      e.clear(); continue
+                  sid=e.get('channel','')
+                  if sid in wanted:
+                      st=dt(e.get('start'))
+                      if st and lo<=st<=hi:
+                          programmes[sid].append(ET.tostring(e,encoding='unicode'))
+                  e.clear()
+
+          root=ET.Element('tv',{'generator-info-name':'TiviMax playlist-specific EPG'})
+          out_ids=set(); output=[]
+          # Prefer tvg-id as XMLTV id; for blank ids retain source id and playlist display name.
+          for p,sid,why in matches:
+              if not programmes.get(sid):continue
+              oid=p['id'].strip() or sid
+              key=(oid,sid)
+              if key in out_ids:continue
+              out_ids.add(key); output.append((p,sid,oid,why))
+              ch=ET.SubElement(root,'channel',{'id':oid})
+              ET.SubElement(ch,'display-name').text=p['name']
+              for n in src.get(sid,{}).get('names',[])[:2]:
+                  if norm(n)!=norm(p['name']): ET.SubElement(ch,'display-name').text=n
+
+          # Duplicate only the schedules actually needed by playlist aliases.
+          for p,sid,oid,why in output:
+              for raw in programmes[sid]:
+                  e=ET.fromstring(raw); e.set('channel',oid); root.append(e)
+
+          ET.ElementTree(root).write('guide.xml',encoding='utf-8',xml_declaration=True)
+          ET.parse('guide.xml')
+          with open('guide.xml','rb') as a,gzip.open('guide.xml.gz','wb',compresslevel=9) as b:
+              while True:
+                  x=a.read(1024*1024)
+                  if not x:break
+                  b.write(x)
+
+          size=os.path.getsize('guide.xml.gz')
+          if size>10*1024*1024:
+              raise SystemExit(f'Refusing to publish oversized guide: {size/1048576:.2f} MB')
+
+          report={
+            'playlist_entries':len(playlist),
+            'entries_with_tvg_id':sum(bool(p['id']) for p in playlist),
+            'unique_tvg_ids':len({p['id'].lower() for p in playlist if p['id']}),
+            'source_channels':len(src),
+            'matched_entries':len(matches),
+            'published_channels':len(output),
+            'matched_source_ids_with_programmes':len({sid for _,sid,_,_ in output}),
+            'match_methods':dict(sorted(counts.items())),
+            'compressed_bytes':size,
+            'unmatched_examples':[{'id':p['id'],'name':p['name'],'group':p['group']} for p in playlist if choose(p)[0] is None][:500]
+          }
+          with open('match-report.json','w',encoding='utf-8') as f:json.dump(report,f,ensure_ascii=False,indent=2)
+          print(json.dumps(report,indent=2))
+          PY
+          gzip -t guide.xml.gz
+
+      - name: Publish validated guide and report
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'tivimax-epg-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add guide.xml.gz match-report.json
+          if git diff --cached --quiet; then
+            echo 'No EPG changes to publish.'
+            exit 0
+          fi
+          git commit -m "Update playlist-specific TiviMax EPG"
+          git push
+,'',z)
+                  if z2 and z2!=z:
+                      candidates=list(name_index.get(z2,()))
               if candidates:
                   same=[x for x in candidates if not c or country(x,'')==c]
                   q=same or candidates
