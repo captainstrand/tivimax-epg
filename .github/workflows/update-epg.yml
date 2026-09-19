@@ -171,8 +171,8 @@ jobs:
                   f.write(programmes[k]+'\n')
                   for a in bysrc.get(k[0],[]):
                       e=ET.fromstring(programmes[k]);e.set('channel',a);f.write(ET.tostring(e,encoding='unicode')+'\n')
-          print(f'TiviMax output source channels: {len(wanted):,}; playlist aliases: {len(out_alias):,}',flush=True)
               f.write('</tv>\n')
+          print(f'TiviMax output source channels: {len(wanted):,}; playlist aliases: {len(out_alias):,}',flush=True)
           print(f'Sources: {len(inputs)}; active channels: {len(used):,}; programmes: {len(programmes):,}; aliases: {len(alias):,}',flush=True)
           PY
           gzip -9 -c guide.xml > guide.xml.gz
